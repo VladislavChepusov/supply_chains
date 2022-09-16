@@ -1,0 +1,16 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": "Node1",
+            "kwargs": {
+                "label": "Testing",
+                "fillcolor": "red",
+                "jopa": "lol"
+            }
+        }
+    ],
+    "edges": []
+}

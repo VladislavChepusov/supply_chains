@@ -1,0 +1,48 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": "1",
+            "kwargs": {
+                "label": "X1.1",
+                "fillcolor": "red",
+                "jopa": "lol",
+                "pos": [
+                    317.5,
+                    75.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": "12",
+            "kwargs": {
+                "label": "12",
+                "shape": "12",
+                "jopa": "testing",
+                "width": 1,
+                "pos": [
+                    374.0,
+                    182.5
+                ],
+                "size": [
+                    41,
+                    43
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": "1",
+            "dest": "12",
+            "kwargs": {}
+        }
+    ]
+}
