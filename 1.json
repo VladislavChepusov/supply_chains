@@ -1,5 +1,5 @@
 {
-    "name": "MainGraph",
+    "name": "Main_Graph",
     "graph_type": 0,
     "kwargs": {},
     "nodes": [
@@ -13,8 +13,8 @@
                 "fillcolor": "grey",
                 "width": 1,
                 "pos": [
-                    929.5,
-                    214.5
+                    1030.5,
+                    120.5
                 ],
                 "size": [
                     57,
@@ -32,8 +32,8 @@
                 "fillcolor": "#b1b0af",
                 "width": 1,
                 "pos": [
-                    753.75,
-                    350.5
+                    1039.75,
+                    260.5
                 ],
                 "size": [
                     57,
@@ -44,56 +44,56 @@
         {
             "name": 3,
             "kwargs": {
-                "label": "X3.1",
+                "label": "X3.2",
                 "number_node": 3,
-                "parent_node": 1,
+                "parent_node": 2,
                 "firms": [],
                 "fillcolor": "#b1b0af",
+                "width": 1,
                 "pos": [
-                    918.75,
-                    370.5
+                    1104.75,
+                    403.5
                 ],
                 "size": [
-                    57,
+                    60,
                     43
-                ],
-                "width": 1
+                ]
             }
         },
         {
             "name": 4,
             "kwargs": {
-                "label": "X4.1",
+                "label": "X4.3",
                 "number_node": 4,
-                "parent_node": 1,
+                "parent_node": 3,
                 "firms": [],
                 "fillcolor": "#b1b0af",
+                "width": 1,
                 "pos": [
-                    1151.75,
-                    353.5
+                    1104.75,
+                    546.5
                 ],
                 "size": [
-                    57,
+                    60,
                     43
-                ],
-                "width": 1
+                ]
             }
         },
         {
             "name": 5,
             "kwargs": {
-                "label": "X5.1",
+                "label": "X5.4",
                 "number_node": 5,
-                "parent_node": 1,
+                "parent_node": 4,
                 "firms": [],
                 "fillcolor": "#b1b0af",
                 "width": 1,
                 "pos": [
-                    1320.75,
-                    316.5
+                    739.75,
+                    684.5
                 ],
                 "size": [
-                    57,
+                    60,
                     43
                 ]
             }
@@ -101,34 +101,32 @@
         {
             "name": 6,
             "kwargs": {
-                "label": "X6.2",
+                "label": "X6.4",
                 "number_node": 6,
-                "parent_node": 2,
+                "parent_node": 4,
                 "firms": [],
                 "fillcolor": "#b1b0af",
                 "pos": [
-                    555.75,
-                    489.5
+                    844.75,
+                    689.5
                 ],
                 "size": [
                     60,
                     43
-                ],
-                "width": 1
+                ]
             }
         },
         {
             "name": 7,
             "kwargs": {
-                "label": "X7.2",
+                "label": "X7.4",
                 "number_node": 7,
-                "parent_node": 2,
+                "parent_node": 4,
                 "firms": [],
                 "fillcolor": "#b1b0af",
-                "width": 1,
                 "pos": [
-                    734.75,
-                    507.5
+                    974.75,
+                    689.5
                 ],
                 "size": [
                     60,
@@ -139,33 +137,14 @@
         {
             "name": 8,
             "kwargs": {
-                "label": "X8.3",
+                "label": "X8.4",
                 "number_node": 8,
-                "parent_node": 3,
-                "firms": [],
-                "fillcolor": "#b1b0af",
-                "width": 1,
-                "pos": [
-                    862.75,
-                    507.5
-                ],
-                "size": [
-                    60,
-                    43
-                ]
-            }
-        },
-        {
-            "name": 9,
-            "kwargs": {
-                "label": "X9.3",
-                "number_node": 9,
-                "parent_node": 3,
+                "parent_node": 4,
                 "firms": [],
                 "fillcolor": "#b1b0af",
                 "pos": [
-                    974.75,
-                    521.5
+                    1104.75,
+                    689.5
                 ],
                 "size": [
                     60,
@@ -175,17 +154,35 @@
             }
         },
         {
-            "name": 10,
+            "name": 9,
             "kwargs": {
-                "label": "X10.3",
-                "number_node": 10,
-                "parent_node": 3,
+                "label": "X9.4",
+                "number_node": 9,
+                "parent_node": 4,
                 "firms": [],
                 "fillcolor": "#b1b0af",
                 "width": 1,
                 "pos": [
-                    1099.5,
-                    511.5
+                    1234.75,
+                    689.5
+                ],
+                "size": [
+                    60,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 10,
+            "kwargs": {
+                "label": "X10.4",
+                "number_node": 10,
+                "parent_node": 4,
+                "firms": [],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    1375.75,
+                    689.5
                 ],
                 "size": [
                     71,
@@ -196,42 +193,77 @@
         {
             "name": 11,
             "kwargs": {
-                "label": "X11.6",
+                "label": "X11.4",
                 "number_node": 11,
-                "parent_node": 6,
+                "parent_node": 4,
                 "firms": [],
-                "fillcolor": "#b1b0af"
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    1509.75,
+                    689.5
+                ],
+                "size": [
+                    70,
+                    43
+                ],
+                "width": 1
             }
         },
         {
             "name": 12,
             "kwargs": {
-                "label": "X12.6",
+                "label": "X12.11",
                 "number_node": 12,
-                "parent_node": 6,
+                "parent_node": 11,
                 "firms": [],
-                "fillcolor": "#b1b0af"
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    1396.75,
+                    842.5
+                ],
+                "size": [
+                    78,
+                    43
+                ]
             }
         },
         {
             "name": 13,
             "kwargs": {
-                "label": "X13.6",
+                "label": "X13.11",
                 "number_node": 13,
-                "parent_node": 6,
+                "parent_node": 11,
                 "firms": [],
                 "fillcolor": "#b1b0af",
+                "pos": [
+                    1541.75,
+                    838.5
+                ],
+                "size": [
+                    78,
+                    43
+                ],
                 "width": 1
             }
         },
         {
             "name": 14,
             "kwargs": {
-                "label": "X14.6",
+                "label": "X14.11",
                 "number_node": 14,
-                "parent_node": 6,
+                "parent_node": 11,
                 "firms": [],
-                "fillcolor": "#b1b0af"
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    1731.75,
+                    837.5
+                ],
+                "size": [
+                    78,
+                    43
+                ]
             }
         }
     ],
@@ -244,84 +276,84 @@
             }
         },
         {
-            "source": 1,
+            "source": 2,
             "dest": 3,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 1,
+            "source": 3,
             "dest": 4,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 1,
+            "source": 4,
             "dest": 5,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 2,
+            "source": 4,
             "dest": 6,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 2,
+            "source": 4,
             "dest": 7,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 3,
+            "source": 4,
             "dest": 8,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 3,
+            "source": 4,
             "dest": 9,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 3,
+            "source": 4,
             "dest": 10,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 6,
+            "source": 4,
             "dest": 11,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 6,
+            "source": 11,
             "dest": 12,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 6,
+            "source": 11,
             "dest": 13,
             "kwargs": {
                 "width": 3
             }
         },
         {
-            "source": 6,
+            "source": 11,
             "dest": 14,
             "kwargs": {
                 "width": 3

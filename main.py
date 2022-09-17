@@ -1,5 +1,4 @@
 import random
-
 from PyQt5.QtWidgets import QFileDialog, QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QHBoxLayout, \
     QFormLayout, QComboBox, QPushButton, QInputDialog, QLineEdit, QLabel
 import sys
@@ -12,114 +11,73 @@ from PyQt5.QtGui import QFontMetrics, QFont, QImage
 sys.path.insert(1, os.path.dirname(__file__) + "/..")
 print(sys.path)
 Parent_node = ''
+Number_node = 1
 
 if __name__ == "__main__":
-    # Create QT application
+    # Создание приложения QT
     app = QApplication(sys.argv)
 
 
-
+    # выделение узла
     def node_selected(node):
         if (qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode):
-            print("Node {} removed".format(node))
+            print(f"Узел {node.name} был удален")
             print("__________________________")
         else:
             global Parent_node
             Parent_node = node
-
-            print(f"infa = {Parent_node}")
-            print("Node selected {}".format(node))
-            print("Node selected {}".format(node.name))
-            print("Node selected {}".format(node.kwargs['label']))
-            # print("Node selected {}".format(node.kwargs['jopa']))
+            print(f"infa родительский узел) = {Parent_node}")
 
 
-    # бесполезная хуйня для  меня
-    # def edge_selected(edge):
-    #     if (qgv.manipulation_mode == QGraphVizManipulationMode.Edge_remove_Mode):
-    #         print("Edge {} removed".format(edge))
-    #     else:
-    #         print("Edge selected {}".format(edge))
-
-
-
-    # Полезная хуйня для меня (двойнок лик по вершине )
+    # Событие двойного нажатия на вершину
     def node_invoked(node):
-        print("Node double clicked")
-        print(f"{node.name}|{node.kwargs['label']}|{node.kwargs['jopa']}")
+        print(f"Двоеное нажатие на вершины {node.name}")
 
 
-
-
-    # удалить потом
-    # def edge_invoked(node):
-    #     print("Edge double clicked")
-
-
-    # Полезно
     def node_removed(node):
-        print("Node removed")
+        print("Вершина удалена")
 
 
-    # Бесполезно(наверное)
-    # def edge_removed(node):
-    #     print("Edge removed")
-
-
-    # Create QGraphViz widget
-    # Дефолтная застановка
-    show_subgraphs = True
+    # QGraphViz виджет
+    show_subgraphs = False
     qgv = QGraphViz(
         show_subgraphs=show_subgraphs,
-        auto_freeze=True,  # show autofreeze capability/показать возможность автозаморозки
+        auto_freeze=True,
         node_selected_callback=node_selected,
-        #edge_selected_callback=edge_selected,
+        # edge_selected_callback=edge_selected,
         node_invoked_callback=node_invoked,
-        #edge_invoked_callback=edge_invoked,
+        # edge_invoked_callback=edge_invoked,
         node_removed_callback=node_removed,
-        #edge_removed_callback=edge_removed,
-
+        # edge_removed_callback=edge_removed,
         # подсветка узлов и связей
         hilight_Nodes=True,
-        hilight_Edges=True
+        hilight_Edges=False
     )
+
     qgv.setStyleSheet("background-color:white;")
-
-    # Create A new Graph using Dot layout engine/Создайте новый график, используя механизм компоновки Dot
+    # Создайте новый график, используя механизм компоновки Dot
     qgv.new(Dot(Graph("Main_Graph"), show_subgraphs=show_subgraphs, font=QFont("Arial", 12), margins=[20, 20]))
-    # Define sone graph
-    n1 = qgv.addNode(qgv.engine.graph, "1", label="X1.1", fillcolor="red",jopa='lol')
-    # n2 = qgv.addNode(qgv.engine.graph, "Node2", label="N2", fillcolor="blue:white:red")
-    # n3 = qgv.addNode(qgv.engine.graph, "Node3", label="N3", shape="diamond", fillcolor="orange")
-    # n4 = qgv.addNode(qgv.engine.graph, "Node4", label="N4", shape="diamond", fillcolor="white")
+    # Добавляем первый узел
+    qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], fillcolor="#b1b0af")
+
     # n5 = qgv.addNode(qgv.engine.graph, "Node5", label="N5", shape="polygon", fillcolor="red", color="white")
-
-    # qgv.addEdge(n1, n2, {})
-    # qgv.addEdge(n3, n2, {})
     # qgv.addEdge(n2, n4, {"width": 2})
-    # qgv.addEdge(n4, n5, {"width": 4})
 
-    # Build the graph (the layout engine organizes where the nodes and connections are)
     # Постройте граф (механизм компоновки организует расположение узлов и соединений)
     qgv.build()
 
-    # Save it to a file to be loaded by Graphviz if needed
-    #qgv.save("test.gv")
-
     # Задание формочки
     w = QMainWindow()
-    w.setWindowTitle('Привер')
+    w.setWindowTitle('SCM v1.0')
     # Create a central widget to handle the QGraphViz object
     wi = QWidget()
     wi.setLayout(QVBoxLayout())
     w.setCentralWidget(wi)
     # Add the QGraphViz object to the layout
     wi.layout().addWidget(qgv)
-    # Add a horizontal layout (a pannel to select what to do)
     # добавить горизонтальный макет (панель для выбора того, что делать)
     hpanel = QHBoxLayout()
     wi.layout().addLayout(hpanel)
-
 
 
     def manipulate():
@@ -128,12 +86,15 @@ if __name__ == "__main__":
 
     def save():
         fname = QFileDialog.getSaveFileName(qgv, "Save", "", "*.json")
-        if (fname[0] != ""):
+        if fname[0] != "":
             qgv.saveAsJson(fname[0])
 
 
     def new():
         qgv.engine.graph = Graph("MainGraph")
+        global Number_node
+        Number_node = 1
+        qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], fillcolor="grey")
         qgv.build()
         qgv.repaint()
 
@@ -143,124 +104,36 @@ if __name__ == "__main__":
         if (fname[0] != ""):
             qgv.loadAJson(fname[0])
 
+
+    # Дописать удаление лчоерний улов и пересчет
     def rem_node():
         qgv.manipulation_mode = QGraphVizManipulationMode.Node_remove_Mode
         for btn in buttons_list:
             btn.setChecked(False)
         btnRemNode.setChecked(True)
 
+
     def add_node_сhild():
         if Parent_node != '':
-            new_node = qgv.addNode(qgv.engine.graph, random.random(), label=f"{random.random()}",jopa='2')
-        #qgv.addNode(qgv.engine.graph, 'pizda', label='pizda', jopa='pizda')
-            qgv.addEdge(Parent_node, new_node, {"width": 2})
+            global Number_node
+            Number_node += 1
+            new_node = qgv.addNode(qgv.engine.graph, Number_node, label=f"X{Number_node}.{Parent_node.name}",
+                                   firms=[], fillcolor="#b1b0af")
+            qgv.addEdge(Parent_node, new_node, {"width": 3})
             qgv.build()
         else:
             print("end")
             pass
 
 
-
-
-
-
-
-
-    def add_node():
-        dlg = QDialog()
-        dlg.ok = False
-        dlg.node_name = ""
-        dlg.node_label = ""
-        dlg.node_type = "None"
-        dlg.node_jopa = ""
-
-        # Layouts
-        main_layout = QVBoxLayout()
-        l = QFormLayout()
-        buttons_layout = QHBoxLayout()
-
-        main_layout.addLayout(l)
-        main_layout.addLayout(buttons_layout)
-        dlg.setLayout(main_layout)
-
-        leNodeName = QLineEdit()
-        leNodeLabel = QLineEdit()
-        cbxNodeType = QComboBox()
-        leImagePath = QLineEdit()
-        leNodeJopa = QLineEdit()
-
-        pbOK = QPushButton()
-        pbCancel = QPushButton()
-
-        cbxNodeType.addItems(["None", "circle", "box"])
-        pbOK.setText("&OK")
-        pbCancel.setText("&Cancel")
-
-        l.setWidget(0, QFormLayout.LabelRole, QLabel("Node Name"))
-        l.setWidget(0, QFormLayout.FieldRole, leNodeName)
-
-        l.setWidget(1, QFormLayout.LabelRole, QLabel("Node Label"))
-        l.setWidget(1, QFormLayout.FieldRole, leNodeLabel)
-
-        l.setWidget(2, QFormLayout.LabelRole, QLabel("Node Type"))
-        l.setWidget(2, QFormLayout.FieldRole, cbxNodeType)
-
-        l.setWidget(3, QFormLayout.LabelRole, QLabel("Node Image"))
-        l.setWidget(3, QFormLayout.FieldRole, leImagePath)
-
-        l.setWidget(4, QFormLayout.LabelRole, QLabel("Node jopa"))
-        l.setWidget(4, QFormLayout.FieldRole, leNodeJopa)
-
-        def ok():
-            dlg.OK = True
-            dlg.node_name = leNodeName.text()
-            dlg.node_label = leNodeLabel.text()
-            dlg.node_jopa = leNodeJopa.text()
-            if (leImagePath.text()):
-                dlg.node_type = leImagePath.text()
-            else:
-                dlg.node_type = cbxNodeType.currentText()
-            dlg.close()
-
-        def cancel():
-            dlg.OK = False
-            dlg.close()
-
-        pbOK.clicked.connect(ok)
-        pbCancel.clicked.connect(cancel)
-
-        buttons_layout.addWidget(pbOK)
-        buttons_layout.addWidget(pbCancel)
-        dlg.exec_()
-        # node_name, okPressed = QInputDialog.getText(wi, "Node name","Node name:", QLineEdit.Normal, "")
-        if dlg.OK and dlg.node_name != '':
-            qgv.addNode(qgv.engine.graph, dlg.node_name, label=dlg.node_label, shape=dlg.node_type,jopa =dlg.node_jopa)
-            qgv.build()
-
-
-
-    # def rem_edge():
-    #     qgv.manipulation_mode = QGraphVizManipulationMode.Edge_remove_Mode
-    #     for btn in buttons_list:
-    #         btn.setChecked(False)
-    #     btnRemEdge.setChecked(True)
-    #
-    #
-    # def add_edge():
-    #     qgv.manipulation_mode = QGraphVizManipulationMode.Edges_Connect_Mode
-    #     for btn in buttons_list:
-    #         btn.setChecked(False)
-    #     btnAddEdge.setChecked(True)
-
-
-    # Add buttons
-    btnNew = QPushButton("New")
+    # Добавить кнопки
+    btnNew = QPushButton("Стереть")
     btnNew.clicked.connect(new)
 
-    btnOpen = QPushButton("Load")
+    btnOpen = QPushButton("Загрузить")
     btnOpen.clicked.connect(load)
 
-    btnSave = QPushButton("Save")
+    btnSave = QPushButton("Сохранить")
     btnSave.clicked.connect(save)
 
     hpanel.addWidget(btnNew)
@@ -269,42 +142,24 @@ if __name__ == "__main__":
 
     buttons_list = []
 
-    btnManip = QPushButton("Manipulate")
+    btnManip = QPushButton("Управление")
     btnManip.setCheckable(True)
     btnManip.setChecked(True)
     btnManip.clicked.connect(manipulate)
     hpanel.addWidget(btnManip)
     buttons_list.append(btnManip)
 
-    btnAddNode = QPushButton("Add Node/Добавить узел")
-    btnAddNode.clicked.connect(add_node)
-    hpanel.addWidget(btnAddNode)
-    buttons_list.append(btnManip)
-
-    btnRemNode = QPushButton("Rem Node/Удалить узел")
-    btnRemNode.setCheckable(True)
-    btnRemNode.clicked.connect(rem_node)
-    hpanel.addWidget(btnRemNode)
-    buttons_list.append(btnRemNode)
-
-
-    btnAddChild = QPushButton("Добавить дочь")
+    btnAddChild = QPushButton("Добавить дочерний узел")
     btnAddChild.setCheckable(True)
     btnAddChild.clicked.connect(add_node_сhild)
     hpanel.addWidget(btnAddChild)
     buttons_list.append(btnAddChild)
 
-    # btnAddEdge = QPushButton("Add Edge/Связь")
-    # btnAddEdge.setCheckable(True)
-    # btnAddEdge.clicked.connect(add_edge)
-    # hpanel.addWidget(btnAddEdge)
-    # buttons_list.append(btnAddEdge)
-    #
-    # btnRemEdge = QPushButton("Rem Edge/Связь")
-    # btnRemEdge.setCheckable(True)
-    # btnRemEdge.clicked.connect(rem_edge)
-    # hpanel.addWidget(btnRemEdge)
-    # buttons_list.append(btnRemEdge)
+    btnRemNode = QPushButton("Удалить узел")
+    btnRemNode.setCheckable(True)
+    btnRemNode.clicked.connect(rem_node)
+    hpanel.addWidget(btnRemNode)
+    buttons_list.append(btnRemNode)
 
     w.showMaximized()
     sys.exit(app.exec_())
