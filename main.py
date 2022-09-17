@@ -8,6 +8,9 @@ from QGraphViz.DotParser import Graph, GraphType
 from QGraphViz.Engines import Dot
 from PyQt5.QtGui import QFontMetrics, QFont, QImage
 
+from scm_firm import scm_firm
+from tableWidget import TableWidget
+
 sys.path.insert(1, os.path.dirname(__file__) + "/..")
 print(sys.path)
 Parent_node = ''
@@ -30,8 +33,67 @@ if __name__ == "__main__":
 
 
     # Событие двойного нажатия на вершину
+    # ПРОВЕРЯТЬ ДАННЫЕ
+    # ПОДГРУЖАТЬ СТАРЫЕ ДАННЫЕ
+    # НОМАРЛЬНОЕ ПРЕДСТАВЛЕНИЕ ДАННЫХ
     def node_invoked(node):
         print(f"Двоеное нажатие на вершины {node.name}")
+        dlg = QDialog()
+        dlg.ok = False
+        dlg.setWindowTitle(f'Фирмы узла {node.kwargs["label"]}')
+
+        main_layout = QVBoxLayout()
+        l = QFormLayout()
+        buttons_layout = QHBoxLayout()
+        table = TableWidget()
+        main_layout.addWidget(table)
+        main_layout.addLayout(l)
+        main_layout.addLayout(buttons_layout)
+        dlg.setLayout(main_layout)
+        dlg.resize(900, 900)
+
+        firm_list = []
+
+
+        def ok():
+            dlg.OK = True
+            rowCount = table.rowCount()
+            #columnCount = table.columnCount()
+            for i in range(rowCount):
+                firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
+            dlg.close()
+
+        def cancel():
+            dlg.OK = False
+            dlg.close()
+
+        pbOK = QPushButton()
+        pbCancel = QPushButton()
+        pbAdd = QPushButton()
+        pbDelete = QPushButton()
+        pbOK.setText("&Сохранить")
+        pbCancel.setText("&Отменить")
+        pbAdd.setText("&Добавить строку")
+        pbDelete.setText("&Удалить строку")
+
+        pbOK.clicked.connect(ok)
+        pbCancel.clicked.connect(cancel)
+        pbAdd.clicked.connect(table._addRow)
+        pbDelete.clicked.connect(table._removeRow)
+        buttons_layout.addWidget(pbOK)
+        buttons_layout.addWidget(pbCancel)
+        buttons_layout.addWidget(pbAdd)
+        buttons_layout.addWidget(pbDelete)
+
+        dlg.exec_()
+        if dlg.OK and firm_list:
+            print(f'firm_list = {firm_list}')
+            node.kwargs['firms'] = firm_list
+
+
+
+
+
 
 
     def node_removed(node):
