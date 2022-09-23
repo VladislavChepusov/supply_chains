@@ -8,6 +8,7 @@ from QGraphViz.DotParser import Graph, GraphType
 from QGraphViz.Engines import Dot
 from PyQt5.QtGui import QFontMetrics, QFont, QImage
 
+from calculations import daughters_map
 from scm_firm import scm_firm
 from tableWidget import TableWidget
 
@@ -152,6 +153,18 @@ if __name__ == "__main__":
             qgv.saveAsJson(fname[0])
 
 
+    # получить структуру данных
+    def chec():
+        print('____________')
+        graph_dic =  qgv.engine.graph.toDICT()
+        #print(graph_dic)
+        #print(graph_dic["edges"])
+        daughters_map(graph_dic["edges"])
+        #print((graph_dic["edges"][0]))
+
+
+
+
     def new():
         qgv.engine.graph = Graph("MainGraph")
         global Number_node
@@ -198,9 +211,17 @@ if __name__ == "__main__":
     btnSave = QPushButton("Сохранить")
     btnSave.clicked.connect(save)
 
+    btndddd = QPushButton("отобразить")
+    btndddd.clicked.connect(chec)
+
+
+
+
     hpanel.addWidget(btnNew)
     hpanel.addWidget(btnOpen)
     hpanel.addWidget(btnSave)
+
+    hpanel.addWidget(btndddd)
 
     buttons_list = []
 
