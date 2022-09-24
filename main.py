@@ -8,7 +8,7 @@ from QGraphViz.DotParser import Graph, GraphType
 from QGraphViz.Engines import Dot
 from PyQt5.QtGui import QFontMetrics, QFont, QImage
 
-from calculations import daughters_map
+from calculations import *
 from scm_firm import scm_firm
 from tableWidget import TableWidget
 
@@ -36,13 +36,67 @@ if __name__ == "__main__":
     # Событие двойного нажатия на вершину
     # ПРОВЕРЯТЬ ДАННЫЕ
     # ПОДГРУЖАТЬ СТАРЫЕ ДАННЫЕ
-    # НОМАРЛЬНОЕ ПРЕДСТАВЛЕНИЕ ДАННЫХ
+    # НОМАРЛЬНОЕ ПРЕДСТАВЛЕНИЕ ДАННЫХ (цену в формате float)!!!!!!
     def node_invoked(node):
         print(f"Двоеное нажатие на вершины {node.name}")
+        # graph_dic = qgv.engine.graph.toDICT()
+
+        if (type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) == 3):
+            dlg = QDialog()
+            dlg.ok = False
+            dlg.A = ""
+            dlg.B = ""
+            # Layouts
+            main_layout = QVBoxLayout()
+            l = QFormLayout()
+            buttons_layout = QHBoxLayout()
+
+            main_layout.addLayout(l)
+            main_layout.addLayout(buttons_layout)
+            dlg.setLayout(main_layout)
+
+            leA = QLineEdit()
+            leB = QLineEdit()
+            buttOK = QPushButton()
+            buttCancel = QPushButton()
+
+            buttOK.setText("&OK")
+            buttCancel.setText("&Cancel")
+
+            l.setWidget(0, QFormLayout.LabelRole, QLabel("A"))
+            l.setWidget(0, QFormLayout.FieldRole, leA)
+
+            l.setWidget(1, QFormLayout.LabelRole, QLabel("B"))
+            l.setWidget(1, QFormLayout.FieldRole, leB)
+
+            def ok():
+                dlg.ok = True
+                dlg.A = leA.text()
+                dlg.B = leB.text()
+                dlg.close()
+
+            def cancel():
+                dlg.OK = False
+                dlg.close()
+
+            buttOK.clicked.connect(ok)
+            buttCancel.clicked.connect(cancel)
+            buttons_layout.addWidget(buttOK)
+            buttons_layout.addWidget(buttCancel)
+            dlg.exec_()
+
+            if dlg.ok and dlg.A != '' and dlg.B != '':
+                print("КНОПКА ОТБАОТА")
+                node.kwargs['level_price'] = [dlg.A, dlg.B]
+
+            print(f'dlg.ok = {dlg.ok}')
+            print(f'dlg.B = {dlg.B}')
+            print(f'dlg.A = {dlg.A}')
+
+
         dlg = QDialog()
         dlg.ok = False
         dlg.setWindowTitle(f'Фирмы узла {node.kwargs["label"]}')
-
         main_layout = QVBoxLayout()
         l = QFormLayout()
         buttons_layout = QHBoxLayout()
@@ -55,19 +109,20 @@ if __name__ == "__main__":
 
         firm_list = []
 
-
         def ok():
             dlg.OK = True
             rowCount = table.rowCount()
-            #columnCount = table.columnCount()
+            # columnCount = table.columnCount()
             for i in range(rowCount):
-                firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
+                # firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
+                firm_list.append({'name_firm': table.item(i, 0).text(),
+                                  'cost_firm': table.item(i, 1).text()}
+                                 )
             dlg.close()
 
         def cancel():
             dlg.OK = False
             dlg.close()
-
         pbOK = QPushButton()
         pbCancel = QPushButton()
         pbAdd = QPushButton()
@@ -85,16 +140,10 @@ if __name__ == "__main__":
         buttons_layout.addWidget(pbCancel)
         buttons_layout.addWidget(pbAdd)
         buttons_layout.addWidget(pbDelete)
-
         dlg.exec_()
         if dlg.OK and firm_list:
-            print(f'firm_list = {firm_list}')
+            # print(f'firm_list = {firm_list}')
             node.kwargs['firms'] = firm_list
-
-
-
-
-
 
 
     def node_removed(node):
@@ -156,13 +205,12 @@ if __name__ == "__main__":
     # получить структуру данных
     def chec():
         print('____________')
-        graph_dic =  qgv.engine.graph.toDICT()
-        #print(graph_dic)
-        #print(graph_dic["edges"])
-        daughters_map(graph_dic["edges"])
-        #print((graph_dic["edges"][0]))
-
-
+        graph_dic = qgv.engine.graph.toDICT()
+        # print(graph_dic)
+        # print(graph_dic["edges"])
+        all_calculation_fun(graph_dic)
+        # daughters_map(graph_dic["edges"])
+        # cost_node_firm(graph_dic["nodes"])
 
 
     def new():
@@ -178,6 +226,9 @@ if __name__ == "__main__":
         fname = QFileDialog.getOpenFileName(qgv, "Open", "", "*.json")
         if (fname[0] != ""):
             qgv.loadAJson(fname[0])
+            graph_js = qgv.engine.graph.toDICT()
+            global Number_node
+            Number_node = len(graph_js['nodes'])
 
 
     # Дописать удаление лчоерний улов и пересчет
@@ -213,9 +264,6 @@ if __name__ == "__main__":
 
     btndddd = QPushButton("отобразить")
     btndddd.clicked.connect(chec)
-
-
-
 
     hpanel.addWidget(btnNew)
     hpanel.addWidget(btnOpen)

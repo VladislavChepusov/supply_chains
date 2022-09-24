@@ -7,14 +7,15 @@
             "name": 1,
             "kwargs": {
                 "label": "X1.1",
+                "level_price": [],
                 "firms": [
                     {
                         "name_firm": "c111",
-                        "cost_firm": "1500"
+                        "cost_firm": 1500
                     },
                     {
                         "name_firm": "c112",
-                        "cost_firm": "1505"
+                        "cost_firm": 1505
                     }
                 ],
                 "fillcolor": "#b1b0af",
@@ -33,22 +34,23 @@
             "name": 2,
             "kwargs": {
                 "label": "X2.1",
+                "level_price": [5000,0.25],
                 "firms": [
                     {
                         "name_firm": "c211",
-                        "cost_firm": "342"
+                        "cost_firm": 342
                     },
                     {
                         "name_firm": "c212",
-                        "cost_firm": "340"
+                        "cost_firm": 340
                     },
                     {
                         "name_firm": "c213",
-                        "cost_firm": "338"
+                        "cost_firm": 338
                     },
                     {
                         "name_firm": "c214",
-                        "cost_firm": "345"
+                        "cost_firm": 345
                     }
                 ],
                 "fillcolor": "#b1b0af",
@@ -67,14 +69,15 @@
             "name": 3,
             "kwargs": {
                 "label": "X3.1",
+                "level_price": [6000,0.19],
                 "firms": [
                     {
                         "name_firm": "c221",
-                        "cost_firm": "120"
+                        "cost_firm": 120
                     },
                     {
                         "name_firm": "c222",
-                        "cost_firm": "122"
+                        "cost_firm": 122
                     }
                 ],
                 "fillcolor": "#b1b0af",
