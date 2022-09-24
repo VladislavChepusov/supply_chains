@@ -11,3 +11,7 @@ pip install pyqt5
 ```bash
 pip install QGraphViz
 ```
+
+```bash
+pip install sympy
+```

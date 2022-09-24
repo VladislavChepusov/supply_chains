@@ -1,0 +1,109 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": 1,
+            "kwargs": {
+                "label": "X1.1",
+                "firms": [
+                    {
+                        "name_firm": "c111",
+                        "cost_firm": "1500"
+                    },
+                    {
+                        "name_firm": "c112",
+                        "cost_firm": "1505"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    569.5,
+                    227.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 2,
+            "kwargs": {
+                "label": "X2.1",
+                "firms": [
+                    {
+                        "name_firm": "c211",
+                        "cost_firm": "342"
+                    },
+                    {
+                        "name_firm": "c212",
+                        "cost_firm": "340"
+                    },
+                    {
+                        "name_firm": "c213",
+                        "cost_firm": "338"
+                    },
+                    {
+                        "name_firm": "c214",
+                        "cost_firm": "345"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    495.75,
+                    334.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 3,
+            "kwargs": {
+                "label": "X3.1",
+                "firms": [
+                    {
+                        "name_firm": "c221",
+                        "cost_firm": "120"
+                    },
+                    {
+                        "name_firm": "c222",
+                        "cost_firm": "122"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    788.75,
+                    346.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": 1,
+            "dest": 2,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 1,
+            "dest": 3,
+            "kwargs": {
+                "width": 3
+            }
+        }
+    ]
+}

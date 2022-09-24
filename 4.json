@@ -1,0 +1,200 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": 1,
+            "kwargs": {
+                "label": "X1.1",
+                "firms": [
+                    {
+                        "name_firm": "\u0441111",
+                        "cost_firm": "1500"
+                    },
+                    {
+                        "name_firm": "\u0441112",
+                        "cost_firm": "1505"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    825.5,
+                    204.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 2,
+            "kwargs": {
+                "label": "X2.1",
+                "firms": [
+                    {
+                        "name_firm": "\u0441211",
+                        "cost_firm": "700"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    682.75,
+                    330.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 3,
+            "kwargs": {
+                "label": "X3.1",
+                "firms": [
+                    {
+                        "name_firm": "\u0441311",
+                        "cost_firm": "720"
+                    },
+                    {
+                        "name_firm": "\u0441312",
+                        "cost_firm": "710"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    940.75,
+                    320.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 4,
+            "kwargs": {
+                "label": "X4.2",
+                "firms": [
+                    {
+                        "name_firm": "\u0441421",
+                        "cost_firm": "342"
+                    },
+                    {
+                        "name_firm": "\u0441422",
+                        "cost_firm": "340"
+                    },
+                    {
+                        "name_firm": "\u0441423",
+                        "cost_firm": "338"
+                    },
+                    {
+                        "name_firm": "\u0441424",
+                        "cost_firm": "345"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    529.75,
+                    488.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 5,
+            "kwargs": {
+                "label": "X5.2",
+                "firms": [
+                    {
+                        "name_firm": "\u0441521",
+                        "cost_firm": "120"
+                    },
+                    {
+                        "name_firm": "\u0441522",
+                        "cost_firm": "122"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    758.75,
+                    481.5
+                ],
+                "size": [
+                    60,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 6,
+            "kwargs": {
+                "label": "X6.3",
+                "firms": [
+                    {
+                        "name_firm": "\u0441631",
+                        "cost_firm": "200"
+                    }
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    1006.75,
+                    500.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": 1,
+            "dest": 2,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 1,
+            "dest": 3,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 2,
+            "dest": 4,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 2,
+            "dest": 5,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 3,
+            "dest": 6,
+            "kwargs": {
+                "width": 3
+            }
+        }
+    ]
+}
