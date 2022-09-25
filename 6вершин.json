@@ -9,19 +9,20 @@
                 "label": "X1.1",
                 "firms": [
                     {
-                        "name_firm": "\u0441111",
-                        "cost_firm": "1500"
+                        "name_firm": "X111",
+                        "cost_firm": 1500.0
                     },
                     {
-                        "name_firm": "\u0441112",
-                        "cost_firm": "1505"
+                        "name_firm": "X112",
+                        "cost_firm": 1505.0
                     }
                 ],
+                "level_price": [],
                 "fillcolor": "#b1b0af",
                 "width": 1,
                 "pos": [
-                    825.5,
-                    204.5
+                    725.5,
+                    112.5
                 ],
                 "size": [
                     57,
@@ -35,14 +36,15 @@
                 "label": "X2.1",
                 "firms": [
                     {
-                        "name_firm": "\u0441211",
-                        "cost_firm": "700"
+                        "name_firm": "X211",
+                        "cost_firm": 700.0
                     }
                 ],
+                "level_price": [],
                 "fillcolor": "#b1b0af",
                 "pos": [
-                    682.75,
-                    330.5
+                    561.75,
+                    265.5
                 ],
                 "size": [
                     57,
@@ -57,19 +59,20 @@
                 "label": "X3.1",
                 "firms": [
                     {
-                        "name_firm": "\u0441311",
-                        "cost_firm": "720"
+                        "name_firm": "X311",
+                        "cost_firm": 720.0
                     },
                     {
-                        "name_firm": "\u0441312",
-                        "cost_firm": "710"
+                        "name_firm": "X312",
+                        "cost_firm": 710.0
                     }
                 ],
+                "level_price": [],
                 "fillcolor": "#b1b0af",
                 "width": 1,
                 "pos": [
-                    940.75,
-                    320.5
+                    892.75,
+                    267.5
                 ],
                 "size": [
                     57,
@@ -83,26 +86,30 @@
                 "label": "X4.2",
                 "firms": [
                     {
-                        "name_firm": "\u0441421",
-                        "cost_firm": "342"
+                        "name_firm": "X421",
+                        "cost_firm": 342.0
                     },
                     {
-                        "name_firm": "\u0441422",
-                        "cost_firm": "340"
+                        "name_firm": "X422",
+                        "cost_firm": 340.0
                     },
                     {
-                        "name_firm": "\u0441423",
-                        "cost_firm": "338"
+                        "name_firm": "X423",
+                        "cost_firm": 338.0
                     },
                     {
-                        "name_firm": "\u0441424",
-                        "cost_firm": "345"
+                        "name_firm": "X424",
+                        "cost_firm": 345.0
                     }
+                ],
+                "level_price": [
+                    5000.0,
+                    0.25
                 ],
                 "fillcolor": "#b1b0af",
                 "pos": [
-                    529.75,
-                    488.5
+                    467.75,
+                    400.5
                 ],
                 "size": [
                     60,
@@ -117,19 +124,23 @@
                 "label": "X5.2",
                 "firms": [
                     {
-                        "name_firm": "\u0441521",
-                        "cost_firm": "120"
+                        "name_firm": "X521",
+                        "cost_firm": 120.0
                     },
                     {
-                        "name_firm": "\u0441522",
-                        "cost_firm": "122"
+                        "name_firm": "X522",
+                        "cost_firm": 122.0
                     }
+                ],
+                "level_price": [
+                    6000.0,
+                    0.09
                 ],
                 "fillcolor": "#b1b0af",
                 "width": 1,
                 "pos": [
-                    758.75,
-                    481.5
+                    677.75,
+                    403.5
                 ],
                 "size": [
                     60,
@@ -143,14 +154,18 @@
                 "label": "X6.3",
                 "firms": [
                     {
-                        "name_firm": "\u0441631",
-                        "cost_firm": "200"
+                        "name_firm": "X631",
+                        "cost_firm": 200.0
                     }
+                ],
+                "level_price": [
+                    5500.0,
+                    0.15
                 ],
                 "fillcolor": "#b1b0af",
                 "pos": [
-                    1006.75,
-                    500.5
+                    957.75,
+                    410.5
                 ],
                 "size": [
                     60,

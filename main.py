@@ -1,15 +1,15 @@
-import random
-from PyQt5.QtWidgets import QFileDialog, QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QHBoxLayout, \
-    QFormLayout, QComboBox, QPushButton, QInputDialog, QLineEdit, QLabel
-import sys
 import os
-from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
-from QGraphViz.DotParser import Graph, GraphType
+import sys
+
+from IPython.external.qt_for_kernel import QtCore
+from PyQt5.QtGui import QFont, QDoubleValidator
+from PyQt5.QtWidgets import QFileDialog, QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QHBoxLayout, \
+    QFormLayout, QPushButton, QLineEdit, QLabel
+from QGraphViz.DotParser import Graph
 from QGraphViz.Engines import Dot
-from PyQt5.QtGui import QFontMetrics, QFont, QImage
+from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
 
 from calculations import *
-from scm_firm import scm_firm
 from tableWidget import TableWidget
 
 sys.path.insert(1, os.path.dirname(__file__) + "/..")
@@ -26,48 +26,53 @@ if __name__ == "__main__":
     def node_selected(node):
         if (qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode):
             print(f"Узел {node.name} был удален")
-            print("__________________________")
         else:
             global Parent_node
             Parent_node = node
-            print(f"infa родительский узел) = {Parent_node}")
 
 
     # Событие двойного нажатия на вершину
     # ПРОВЕРЯТЬ ДАННЫЕ
     # ПОДГРУЖАТЬ СТАРЫЕ ДАННЫЕ
-    # НОМАРЛЬНОЕ ПРЕДСТАВЛЕНИЕ ДАННЫХ (цену в формате float)!!!!!!
+    #  измеинть таблицу в разделе цен(сделать валидацию как тут)
     def node_invoked(node):
         print(f"Двоеное нажатие на вершины {node.name}")
         # graph_dic = qgv.engine.graph.toDICT()
+        validator = QDoubleValidator(0.99, 99.99, 4)
+        # validator.setLocale(QtCore.QLocale("en_US"))
 
-        if (type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) == 3):
+        def cancel():
+            dlg.OK = False
+            dlg.ok = False
+            dlg.close()
+
+        if type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) == 3:
             dlg = QDialog()
             dlg.ok = False
+            dlg.setWindowTitle(f'Задать значения рынка # {node.name}')
             dlg.A = ""
             dlg.B = ""
-            # Layouts
+
             main_layout = QVBoxLayout()
             l = QFormLayout()
             buttons_layout = QHBoxLayout()
-
             main_layout.addLayout(l)
             main_layout.addLayout(buttons_layout)
             dlg.setLayout(main_layout)
 
             leA = QLineEdit()
             leB = QLineEdit()
+            leA.setValidator(validator)
+            leB.setValidator(validator)
+            l.setWidget(0, QFormLayout.LabelRole, QLabel("A="))
+            l.setWidget(0, QFormLayout.FieldRole, leA)
+            l.setWidget(1, QFormLayout.LabelRole, QLabel("B="))
+            l.setWidget(1, QFormLayout.FieldRole, leB)
+
             buttOK = QPushButton()
             buttCancel = QPushButton()
-
-            buttOK.setText("&OK")
-            buttCancel.setText("&Cancel")
-
-            l.setWidget(0, QFormLayout.LabelRole, QLabel("A"))
-            l.setWidget(0, QFormLayout.FieldRole, leA)
-
-            l.setWidget(1, QFormLayout.LabelRole, QLabel("B"))
-            l.setWidget(1, QFormLayout.FieldRole, leB)
+            buttOK.setText("&Сохранить")
+            buttCancel.setText("&Отменить")
 
             def ok():
                 dlg.ok = True
@@ -75,24 +80,24 @@ if __name__ == "__main__":
                 dlg.B = leB.text()
                 dlg.close()
 
-            def cancel():
-                dlg.OK = False
-                dlg.close()
+            # def cancel():
+            #     dlg.OK = False
+            #     dlg.close()
 
             buttOK.clicked.connect(ok)
             buttCancel.clicked.connect(cancel)
             buttons_layout.addWidget(buttOK)
             buttons_layout.addWidget(buttCancel)
+
+            dlg.setFixedSize(700, 100)
+            dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+            dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
             dlg.exec_()
 
             if dlg.ok and dlg.A != '' and dlg.B != '':
-                print("КНОПКА ОТБАОТА")
-                node.kwargs['level_price'] = [dlg.A, dlg.B]
-
-            print(f'dlg.ok = {dlg.ok}')
-            print(f'dlg.B = {dlg.B}')
-            print(f'dlg.A = {dlg.A}')
-
+                A = float(dlg.A.replace(',', '.'))
+                B = float(dlg.B.replace(',', '.'))
+                node.kwargs['level_price'] = [A, B]
 
         dlg = QDialog()
         dlg.ok = False
@@ -116,13 +121,14 @@ if __name__ == "__main__":
             for i in range(rowCount):
                 # firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
                 firm_list.append({'name_firm': table.item(i, 0).text(),
-                                  'cost_firm': table.item(i, 1).text()}
+                                  'cost_firm': float(table.item(i, 1).text().replace(',', '.'))}
                                  )
             dlg.close()
 
-        def cancel():
-            dlg.OK = False
-            dlg.close()
+        # def cancel():
+        #     dlg.OK = False
+        #     dlg.close()
+
         pbOK = QPushButton()
         pbCancel = QPushButton()
         pbAdd = QPushButton()
@@ -140,6 +146,9 @@ if __name__ == "__main__":
         buttons_layout.addWidget(pbCancel)
         buttons_layout.addWidget(pbAdd)
         buttons_layout.addWidget(pbDelete)
+
+        dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+        dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         dlg.exec_()
         if dlg.OK and firm_list:
             # print(f'firm_list = {firm_list}')
@@ -170,7 +179,7 @@ if __name__ == "__main__":
     # Создайте новый график, используя механизм компоновки Dot
     qgv.new(Dot(Graph("Main_Graph"), show_subgraphs=show_subgraphs, font=QFont("Arial", 12), margins=[20, 20]))
     # Добавляем первый узел
-    qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], fillcolor="#b1b0af")
+    qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], level_price=[], fillcolor="#b1b0af")
 
     # n5 = qgv.addNode(qgv.engine.graph, "Node5", label="N5", shape="polygon", fillcolor="red", color="white")
     # qgv.addEdge(n2, n4, {"width": 2})
@@ -217,7 +226,7 @@ if __name__ == "__main__":
         qgv.engine.graph = Graph("MainGraph")
         global Number_node
         Number_node = 1
-        qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], fillcolor="grey")
+        qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[],level_price=[], fillcolor="grey")
         qgv.build()
         qgv.repaint()
 
@@ -244,7 +253,7 @@ if __name__ == "__main__":
             global Number_node
             Number_node += 1
             new_node = qgv.addNode(qgv.engine.graph, Number_node, label=f"X{Number_node}.{Parent_node.name}",
-                                   firms=[], fillcolor="#b1b0af")
+                                   firms=[], level_price=[], fillcolor="#b1b0af")
             qgv.addEdge(Parent_node, new_node, {"width": 3})
             qgv.build()
         else:
