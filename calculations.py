@@ -24,10 +24,31 @@ def all_calculation_fun(graph):
             parent = 1
         if nodes in cart_maps:
             cart_nodes[nodes]['price'] = price_function(cart_nodes, nodes, cart_maps)
-        cart_nodes[nodes]['value'] = (volume_calculation(cart_nodes, nodes, parent, cart_maps)).args[0][:-1]
-    print(f"cart_nodes ={cart_nodes}")
-    #revers_stack = stack[::-1]
-    #for new_result in stack:
+
+        v1 = (volume_calculation(cart_nodes, nodes, parent, cart_maps))
+        cart_nodes[nodes]['value'] = v1[0].args[0][:-1]
+        cart_nodes[nodes]['profit'] = v1[1]
+        #cart_nodes[nodes]['value'] = (volume_calculation(cart_nodes, nodes, parent, cart_maps)).args[0][:-1]
+
+    for key, value in cart_nodes.items():
+        print("{0}: {1}".format(key, value))
+
+
+    revers_stack = stack[::-1]
+    for new_result in revers_stack:
+        print(f"Сейчас мы на узле  {new_result}")
+        #чинчопа чинчопа.Реальные значения для корневого узла подсчитаны
+        if new_result == 1:
+            cart_nodes[new_result]['price'] = sum(cart_nodes[new_result]['value']) * -(cart_nodes[new_result]['price'][1]) + (cart_nodes[new_result]['price'][0])
+            q = sym.symbols(f"q{new_result}_1:{len(cart_nodes[new_result]['value']) + 1}")
+            cart_nodes[new_result]['profit'] = [x.subs([ (u,y) for u,y in zip(q,cart_nodes[new_result]['value'])]) for x in cart_nodes[new_result]['profit'] ]
+        else:
+            # остается спуститься вниз и расписать все остальные узлы
+            pass
+
+    for key, value in cart_nodes.items():
+        print("{0}: {1}".format(key, value))
+
 
 
 
@@ -62,7 +83,7 @@ def volume_calculation(nf, name_node, parent, cart_maps):
     }
     P = switch.get(type_node(name_node, cart_maps))
     Pi = [sym.diff(P[i], q[i]) for i in range(size_)]
-    return sym.linsolve([*Pi], (*q, p))
+    return [sym.linsolve([*Pi], (*q, p)),P]
 
 
 # проверить тип узла
