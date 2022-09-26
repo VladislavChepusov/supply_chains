@@ -1,19 +1,17 @@
-import os
 import sys
-
-from IPython.external.qt_for_kernel import QtCore
+from IPython.external.qt_for_kernel import QtCore, QtGui
 from PyQt5.QtGui import QFont, QDoubleValidator
 from PyQt5.QtWidgets import QFileDialog, QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QHBoxLayout, \
     QFormLayout, QPushButton, QLineEdit, QLabel
 from QGraphViz.DotParser import Graph
 from QGraphViz.Engines import Dot
 from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
-
-from calculations import *
+from calculations import all_calculation_fun, type_node, daughters_map
 from tableWidget import TableWidget
 
-sys.path.insert(1, os.path.dirname(__file__) + "/..")
-print(sys.path)
+# sys.path.insert(1, os.path.dirname(__file__) + "/..")
+# print(sys.path)
+
 Parent_node = ''
 Number_node = 1
 
@@ -24,7 +22,7 @@ if __name__ == "__main__":
 
     # выделение узла
     def node_selected(node):
-        if (qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode):
+        if qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode:
             print(f"Узел {node.name} был удален")
         else:
             global Parent_node
@@ -39,10 +37,11 @@ if __name__ == "__main__":
         print(f"Двоеное нажатие на вершины {node.name}")
         # graph_dic = qgv.engine.graph.toDICT()
         validator = QDoubleValidator(0.99, 99.99, 4)
+
         # validator.setLocale(QtCore.QLocale("en_US"))
 
         def cancel():
-            dlg.OK = False
+            # dlg.OK = False
             dlg.ok = False
             dlg.close()
 
@@ -105,7 +104,8 @@ if __name__ == "__main__":
         main_layout = QVBoxLayout()
         l = QFormLayout()
         buttons_layout = QHBoxLayout()
-        table = TableWidget()
+
+        table = TableWidget(1, 2, ["Название фирмы", "Издержки за ед.п"])
         main_layout.addWidget(table)
         main_layout.addLayout(l)
         main_layout.addLayout(buttons_layout)
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         firm_list = []
 
         def ok():
-            dlg.OK = True
+            dlg.ok = True
             rowCount = table.rowCount()
             # columnCount = table.columnCount()
             for i in range(rowCount):
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         dlg.exec_()
-        if dlg.OK and firm_list:
+        if dlg.ok and firm_list:
             # print(f'firm_list = {firm_list}')
             node.kwargs['firms'] = firm_list
 
@@ -213,27 +213,82 @@ if __name__ == "__main__":
 
     # получить структуру данных
     def chec():
-        print('____________')
         graph_dic = qgv.engine.graph.toDICT()
-        # print(graph_dic)
-        # print(graph_dic["edges"])
-        all_calculation_fun(graph_dic)
-        # daughters_map(graph_dic["edges"])
-        # cost_node_firm(graph_dic["nodes"])
+        calculation = all_calculation_fun(graph_dic)
+        # for key, value in calculation.items():
+        #     print("{0}: {1}".format(key, value))
+        dlg = QDialog()
+        dlg.ok = False
+        dlg.setWindowTitle(f'Итоговый расчет')
+        main_layout = QVBoxLayout()
+        l = QFormLayout()
+        buttons_layout = QHBoxLayout()
+
+        table = TableWidget(0, 2, ["Поле", "Значение"])
+
+        def add_visual(items, gluing):
+            rowPosition = table.rowCount()
+            table.insertRow(rowPosition)
+            [item.setFlags(QtCore.Qt.ItemIsEnabled) for item in items]
+            if gluing:
+                table.setSpan(rowPosition, 0, 1, 2)
+                table.setItem(rowPosition, 0, items[0])
+            else:
+                for i in range(len(items)):
+                    table.setItem(rowPosition, i, items[i])
+
+        for i in calculation:
+            level = [QtGui.QTableWidgetItem(f"Узел №{i}")]
+            add_visual(level, True)
+            price1 = [QtGui.QTableWidgetItem(f"Цена на узле №{i}"),
+                      QtGui.QTableWidgetItem(f"{calculation[i]['price']}")]
+            add_visual(price1, False)
+
+            le = len(calculation[i]['cost'])
+            for j in range(le):
+                costs = [QtGui.QTableWidgetItem(f"Издержки фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
+                         QtGui.QTableWidgetItem(f"{calculation[i]['cost'][j]}")]
+                add_visual(costs, False)
+                values = [QtGui.QTableWidgetItem(f"Объем фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
+                          QtGui.QTableWidgetItem(f"{calculation[i]['value'][j]}")]
+                add_visual(values, False)
+                profits = [QtGui.QTableWidgetItem(f"Прибыль фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
+                           QtGui.QTableWidgetItem(f"{calculation[i]['profit'][j]}")]
+                add_visual(profits, False)
+
+        # rowPosition = table.rowCount()
+        # table.insertRow(rowPosition)
+        # table.setSpan(0, 0, 1, 2)
+        # table.setItem(rowPosition, 0,QtGui.QTableWidgetItem("1"))
+        # table.setItem(rowPosition, 1, QtGui.QTableWidgetItem("2"))
+
+        main_layout.addWidget(table)
+        main_layout.addLayout(l)
+        main_layout.addLayout(buttons_layout)
+        dlg.setLayout(main_layout)
+        dlg.resize(900, 900)
+        dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+        dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
+        pbCancel = QPushButton()
+        pbCancel.setText("&Ок")
+        pbCancel.clicked.connect(dlg.close)
+        buttons_layout.addWidget(pbCancel)
+
+        dlg.exec_()
 
 
     def new():
         qgv.engine.graph = Graph("MainGraph")
         global Number_node
         Number_node = 1
-        qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[],level_price=[], fillcolor="grey")
+        qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], level_price=[], fillcolor="grey")
         qgv.build()
         qgv.repaint()
 
 
     def load():
         fname = QFileDialog.getOpenFileName(qgv, "Open", "", "*.json")
-        if (fname[0] != ""):
+        if fname[0] != "":
             qgv.loadAJson(fname[0])
             graph_js = qgv.engine.graph.toDICT()
             global Number_node
@@ -248,7 +303,7 @@ if __name__ == "__main__":
         btnRemNode.setChecked(True)
 
 
-    def add_node_сhild():
+    def add_node_child():
         if Parent_node != '':
             global Number_node
             Number_node += 1
@@ -256,13 +311,10 @@ if __name__ == "__main__":
                                    firms=[], level_price=[], fillcolor="#b1b0af")
             qgv.addEdge(Parent_node, new_node, {"width": 3})
             qgv.build()
-        else:
-            print("end")
-            pass
 
 
     # Добавить кнопки
-    btnNew = QPushButton("Стереть")
+    btnNew = QPushButton("Заново")
     btnNew.clicked.connect(new)
 
     btnOpen = QPushButton("Загрузить")
@@ -271,7 +323,7 @@ if __name__ == "__main__":
     btnSave = QPushButton("Сохранить")
     btnSave.clicked.connect(save)
 
-    btndddd = QPushButton("отобразить")
+    btndddd = QPushButton("Рассчитать")
     btndddd.clicked.connect(chec)
 
     hpanel.addWidget(btnNew)
@@ -291,11 +343,11 @@ if __name__ == "__main__":
 
     btnAddChild = QPushButton("Добавить дочерний узел")
     btnAddChild.setCheckable(True)
-    btnAddChild.clicked.connect(add_node_сhild)
+    btnAddChild.clicked.connect(add_node_child)
     hpanel.addWidget(btnAddChild)
     buttons_list.append(btnAddChild)
 
-    btnRemNode = QPushButton("Удалить узел")
+    btnRemNode = QPushButton("Удалить узел(пока работает неверно)")
     btnRemNode.setCheckable(True)
     btnRemNode.clicked.connect(rem_node)
     hpanel.addWidget(btnRemNode)

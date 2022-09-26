@@ -4,12 +4,15 @@ from PyQt5.QtCore import Qt
 
 
 class TableWidget(QTableWidget):
-    def __init__(self):
-        super().__init__(1, 2)
-        name = ["Имя","Цена"]
+    def __init__(self,row,col,name):
+
+        super().__init__(row,col)
+        #super().__init__(1, 2)
+        #name = ["Имя","Цена"]
         self.setHorizontalHeaderLabels(name)
         self.verticalHeader().setDefaultSectionSize(50)
-        self.horizontalHeader().setDefaultSectionSize(250)
+        self.horizontalHeader().setDefaultSectionSize(425)
+
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
     # Добавить строку таблицы
     def _addRow(self):
