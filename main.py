@@ -9,9 +9,6 @@ from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
 from calculations import all_calculation_fun, type_node, daughters_map
 from tableWidget import TableWidget
 
-# sys.path.insert(1, os.path.dirname(__file__) + "/..")
-# print(sys.path)
-
 Parent_node = ''
 Number_node = 1
 
@@ -20,7 +17,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
 
 
-    # выделение узла
+    # Выделение узла
     def node_selected(node):
         if qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode:
             print(f"Узел {node.name} был удален")
@@ -151,7 +148,6 @@ if __name__ == "__main__":
         dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         dlg.exec_()
         if dlg.ok and firm_list:
-            # print(f'firm_list = {firm_list}')
             node.kwargs['firms'] = firm_list
 
 
@@ -224,14 +220,15 @@ if __name__ == "__main__":
         l = QFormLayout()
         buttons_layout = QHBoxLayout()
 
-        table = TableWidget(0, 2, ["Поле", "Значение"])
+        # table = TableWidget(0, 2, ["Поле", "Значение"])
+        table = TableWidget(0, 4, ["Фирма", "Издержки", "Объем", "Прибыль"])
 
         def add_visual(items, gluing):
             rowPosition = table.rowCount()
             table.insertRow(rowPosition)
             [item.setFlags(QtCore.Qt.ItemIsEnabled) for item in items]
             if gluing:
-                table.setSpan(rowPosition, 0, 1, 2)
+                table.setSpan(rowPosition, 0, 1, 4)
                 table.setItem(rowPosition, 0, items[0])
             else:
                 for i in range(len(items)):
@@ -240,27 +237,28 @@ if __name__ == "__main__":
         for i in calculation:
             level = [QtGui.QTableWidgetItem(f"Узел №{i}")]
             add_visual(level, True)
-            price1 = [QtGui.QTableWidgetItem(f"Цена на узле №{i}"),
-                      QtGui.QTableWidgetItem(f"{calculation[i]['price']}")]
-            add_visual(price1, False)
+
+            # price1 = [QtGui.QTableWidgetItem(f"Цена на узле №{i}"),
+            #           QtGui.QTableWidgetItem(f"{calculation[i]['price']}")]
+            price1 = [QtGui.QTableWidgetItem(f"Цена на узле №{i} = {calculation[i]['price']}")]
+            add_visual(price1, True)
 
             le = len(calculation[i]['cost'])
             for j in range(le):
-                costs = [QtGui.QTableWidgetItem(f"Издержки фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
-                         QtGui.QTableWidgetItem(f"{calculation[i]['cost'][j]}")]
-                add_visual(costs, False)
-                values = [QtGui.QTableWidgetItem(f"Объем фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
-                          QtGui.QTableWidgetItem(f"{calculation[i]['value'][j]}")]
-                add_visual(values, False)
-                profits = [QtGui.QTableWidgetItem(f"Прибыль фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
-                           QtGui.QTableWidgetItem(f"{calculation[i]['profit'][j]}")]
-                add_visual(profits, False)
-
-        # rowPosition = table.rowCount()
-        # table.insertRow(rowPosition)
-        # table.setSpan(0, 0, 1, 2)
-        # table.setItem(rowPosition, 0,QtGui.QTableWidgetItem("1"))
-        # table.setItem(rowPosition, 1, QtGui.QTableWidgetItem("2"))
+                data = [QtGui.QTableWidgetItem(f"{calculation[i]['name_firm'][j]} "),
+                        QtGui.QTableWidgetItem(f"{calculation[i]['cost'][j]}"),
+                        QtGui.QTableWidgetItem(f"{calculation[i]['value'][j]}"),
+                        QtGui.QTableWidgetItem(f"{calculation[i]['profit'][j]}")]
+                add_visual(data, False)
+                # costs = [QtGui.QTableWidgetItem(f"Издержки фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
+                #          QtGui.QTableWidgetItem(f"{calculation[i]['cost'][j]}")]
+                # add_visual(costs, False)
+                # values = [QtGui.QTableWidgetItem(f"Объем фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
+                #           QtGui.QTableWidgetItem(f"{calculation[i]['value'][j]}")]
+                # add_visual(values, False)
+                # profits = [QtGui.QTableWidgetItem(f"Прибыль фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
+                #            QtGui.QTableWidgetItem(f"{calculation[i]['profit'][j]}")]
+                # add_visual(profits, False)
 
         main_layout.addWidget(table)
         main_layout.addLayout(l)

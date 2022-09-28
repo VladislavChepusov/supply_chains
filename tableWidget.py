@@ -11,7 +11,7 @@ class TableWidget(QTableWidget):
         #name = ["Имя","Цена"]
         self.setHorizontalHeaderLabels(name)
         self.verticalHeader().setDefaultSectionSize(50)
-        self.horizontalHeader().setDefaultSectionSize(425)
+        self.horizontalHeader().setDefaultSectionSize(899/col)
 
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
     # Добавить строку таблицы
