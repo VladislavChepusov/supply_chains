@@ -1,27 +1,24 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QHeaderView, QAbstractItemView, QPushButton, QTableWidget, \
-                            QTableWidgetItem, QVBoxLayout, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QHeaderView, QTableWidget, \
+    QTableWidgetItem, QFileDialog, QMessageBox
+from xlsxwriter import Workbook
 
 
 class TableWidget(QTableWidget):
-    def __init__(self,row,col,name):
-
-        super().__init__(row,col)
-        #super().__init__(1, 2)
-        #name = ["Имя","Цена"]
+    def __init__(self, row, col, name):
+        super().__init__(row, col)
         self.setHorizontalHeaderLabels(name)
         self.verticalHeader().setDefaultSectionSize(50)
-        self.horizontalHeader().setDefaultSectionSize(899/col)
-
+        self.horizontalHeader().setDefaultSectionSize(899 / col)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+
     # Добавить строку таблицы
     def _addRow(self):
-        rowCount = self.rowCount()
-        self.insertRow(rowCount )
+        self.insertRow(self.rowCount())
+
     # Удалить строку таблицы
     def _removeRow(self):
         if self.rowCount() > 1:
-            self.removeRow(self.rowCount()-1)
+            self.removeRow(self.rowCount() - 1)
 
     def _copyRow(self):
         self.insertRow(self.rowCount())
@@ -29,5 +26,37 @@ class TableWidget(QTableWidget):
         columnCount = self.columnCount()
 
         for j in range(columnCount):
-            if not self.item(rowCount-2, j) is None:
-                self.setItem(rowCount-1, j, QTableWidgetItem(self.item(rowCount-2, j).text()))
+            if not self.item(rowCount - 2, j) is None:
+                self.setItem(rowCount - 1, j, QTableWidgetItem(self.item(rowCount - 2, j).text()))
+
+    def tableSave(self):
+        fileName, ok = QFileDialog.getSaveFileName(
+            self,
+            "Сохранить файл",
+            ".",
+            "All Files(*.xlsx)"
+        )
+        if not fileName:
+            return
+
+        model = self.model()
+        _list = [[self.horizontalHeaderItem(i).text() for i in range(model.columnCount())]]
+        for row in range(model.rowCount()):
+            _r = []
+
+            for column in range(model.columnCount()):
+                _r.append("{}".format(model.index(row, column).data() or ""))
+            _list.append(_r)
+        workbook = Workbook(fileName)
+        worksheet = workbook.add_worksheet()
+
+        print(f"list = {_list}")
+        for r, row in enumerate(_list):
+            for c, col in enumerate(row):
+                worksheet.write(r, c, col)
+        workbook.close()
+        QMessageBox.information(
+            self,
+            "Успешно!",
+            f"Данные сохранены в файле: \n{fileName}"
+        )

@@ -27,6 +27,7 @@ def all_calculation_fun(graph):
         cart_nodes[nodes]['profit'] = v1[1]
         # cart_nodes[nodes]['value'] = (volume_calculation(cart_nodes, nodes, parent, cart_maps)).args[0][:-1]
 
+    
     revers_stack = stack[::-1]
     for new_result in revers_stack:
         q = sym.symbols(f"q{new_result}_1:{len(cart_nodes[new_result]['value']) + 1}")

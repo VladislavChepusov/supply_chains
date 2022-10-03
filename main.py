@@ -7,6 +7,7 @@ from QGraphViz.DotParser import Graph
 from QGraphViz.Engines import Dot
 from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
 from calculations import all_calculation_fun, type_node, daughters_map
+
 from tableWidget import TableWidget
 
 Parent_node = ''
@@ -38,7 +39,6 @@ if __name__ == "__main__":
         # validator.setLocale(QtCore.QLocale("en_US"))
 
         def cancel():
-            # dlg.OK = False
             dlg.ok = False
             dlg.close()
 
@@ -76,10 +76,6 @@ if __name__ == "__main__":
                 dlg.B = leB.text()
                 dlg.close()
 
-            # def cancel():
-            #     dlg.OK = False
-            #     dlg.close()
-
             buttOK.clicked.connect(ok)
             buttCancel.clicked.connect(cancel)
             buttons_layout.addWidget(buttOK)
@@ -114,17 +110,12 @@ if __name__ == "__main__":
         def ok():
             dlg.ok = True
             rowCount = table.rowCount()
-            # columnCount = table.columnCount()
             for i in range(rowCount):
                 # firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
                 firm_list.append({'name_firm': table.item(i, 0).text(),
                                   'cost_firm': float(table.item(i, 1).text().replace(',', '.'))}
                                  )
             dlg.close()
-
-        # def cancel():
-        #     dlg.OK = False
-        #     dlg.close()
 
         pbOK = QPushButton()
         pbCancel = QPushButton()
@@ -147,6 +138,7 @@ if __name__ == "__main__":
         dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
         dlg.exec_()
+
         if dlg.ok and firm_list:
             node.kwargs['firms'] = firm_list
 
@@ -156,33 +148,27 @@ if __name__ == "__main__":
 
 
     # QGraphViz виджет
-    show_subgraphs = False
+    ShowSubGraphs = False
     qgv = QGraphViz(
-        show_subgraphs=show_subgraphs,
+        show_subgraphs=ShowSubGraphs,
         auto_freeze=True,
         node_selected_callback=node_selected,
-        # edge_selected_callback=edge_selected,
         node_invoked_callback=node_invoked,
-        # edge_invoked_callback=edge_invoked,
         node_removed_callback=node_removed,
-        # edge_removed_callback=edge_removed,
-        # подсветка узлов и связей
         hilight_Nodes=True,
         hilight_Edges=False
     )
 
     qgv.setStyleSheet("background-color:white;")
     # Создайте новый график, используя механизм компоновки Dot
-    qgv.new(Dot(Graph("Main_Graph"), show_subgraphs=show_subgraphs, font=QFont("Arial", 12), margins=[20, 20]))
+    qgv.new(Dot(Graph("Main_Graph"), show_subgraphs=ShowSubGraphs, font=QFont("Arial", 12), margins=[20, 20]))
     # Добавляем первый узел
     qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], level_price=[], fillcolor="#b1b0af")
-
     # n5 = qgv.addNode(qgv.engine.graph, "Node5", label="N5", shape="polygon", fillcolor="red", color="white")
     # qgv.addEdge(n2, n4, {"width": 2})
 
     # Постройте граф (механизм компоновки организует расположение узлов и соединений)
     qgv.build()
-
     # Задание формочки
     w = QMainWindow()
     w.setWindowTitle('SCM v1.0')
@@ -208,19 +194,18 @@ if __name__ == "__main__":
 
 
     # получить структуру данных
-    def chec():
+    def CalculationsOfIndicators():
         graph_dic = qgv.engine.graph.toDICT()
         calculation = all_calculation_fun(graph_dic)
-        # for key, value in calculation.items():
-        #     print("{0}: {1}".format(key, value))
+
+        for key, value in calculation.items():
+            print("{0}: {1}".format(key, value))
         dlg = QDialog()
         dlg.ok = False
         dlg.setWindowTitle(f'Итоговый расчет')
         main_layout = QVBoxLayout()
         l = QFormLayout()
         buttons_layout = QHBoxLayout()
-
-        # table = TableWidget(0, 2, ["Поле", "Значение"])
         table = TableWidget(0, 4, ["Фирма", "Издержки", "Объем", "Прибыль"])
 
         def add_visual(items, gluing):
@@ -237,9 +222,6 @@ if __name__ == "__main__":
         for i in calculation:
             level = [QtGui.QTableWidgetItem(f"Узел №{i}")]
             add_visual(level, True)
-
-            # price1 = [QtGui.QTableWidgetItem(f"Цена на узле №{i}"),
-            #           QtGui.QTableWidgetItem(f"{calculation[i]['price']}")]
             price1 = [QtGui.QTableWidgetItem(f"Цена на узле №{i} = {calculation[i]['price']}")]
             add_visual(price1, True)
 
@@ -250,15 +232,6 @@ if __name__ == "__main__":
                         QtGui.QTableWidgetItem(f"{calculation[i]['value'][j]}"),
                         QtGui.QTableWidgetItem(f"{calculation[i]['profit'][j]}")]
                 add_visual(data, False)
-                # costs = [QtGui.QTableWidgetItem(f"Издержки фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
-                #          QtGui.QTableWidgetItem(f"{calculation[i]['cost'][j]}")]
-                # add_visual(costs, False)
-                # values = [QtGui.QTableWidgetItem(f"Объем фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
-                #           QtGui.QTableWidgetItem(f"{calculation[i]['value'][j]}")]
-                # add_visual(values, False)
-                # profits = [QtGui.QTableWidgetItem(f"Прибыль фирмы {calculation[i]['name_firm'][j]} в узле №{i}"),
-                #            QtGui.QTableWidgetItem(f"{calculation[i]['profit'][j]}")]
-                # add_visual(profits, False)
 
         main_layout.addWidget(table)
         main_layout.addLayout(l)
@@ -267,11 +240,16 @@ if __name__ == "__main__":
         dlg.resize(900, 900)
         dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
+
         pbCancel = QPushButton()
         pbCancel.setText("&Ок")
         pbCancel.clicked.connect(dlg.close)
         buttons_layout.addWidget(pbCancel)
 
+        pbExcel = QPushButton()
+        pbExcel.setText("&Экспорт в Excel")
+        pbExcel.clicked.connect(table.tableSave)
+        buttons_layout.addWidget(pbExcel)
         dlg.exec_()
 
 
@@ -322,7 +300,7 @@ if __name__ == "__main__":
     btnSave.clicked.connect(save)
 
     btndddd = QPushButton("Рассчитать")
-    btndddd.clicked.connect(chec)
+    btndddd.clicked.connect(CalculationsOfIndicators)
 
     hpanel.addWidget(btnNew)
     hpanel.addWidget(btnOpen)
