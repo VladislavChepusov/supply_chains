@@ -2,7 +2,7 @@ import sys
 from IPython.external.qt_for_kernel import QtCore, QtGui
 from PyQt5.QtGui import QFont, QDoubleValidator
 from PyQt5.QtWidgets import QFileDialog, QDialog, QApplication, QWidget, QMainWindow, QVBoxLayout, QHBoxLayout, \
-    QFormLayout, QPushButton, QLineEdit, QLabel
+    QFormLayout, QPushButton, QLineEdit, QLabel, QTableWidgetItem
 from QGraphViz.DotParser import Graph
 from QGraphViz.Engines import Dot
 from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
@@ -16,7 +16,6 @@ if __name__ == "__main__":
     # Создание приложения QT
     app = QApplication(sys.argv)
 
-
     # Выделение узла
     def node_selected(node):
         if qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode:
@@ -25,9 +24,7 @@ if __name__ == "__main__":
             global Parent_node
             Parent_node = node
 
-
     # Событие двойного нажатия на вершину
-    # ПОДГРУЖАТЬ СТАРЫЕ ДАННЫЕ
     def node_invoked(node):
         global dlg
         print(f"Двойное нажатие на вершины {node.name}")
@@ -37,6 +34,7 @@ if __name__ == "__main__":
             dlg = QDialog()
             dlg.ok = False
             dlg.setWindowTitle(f'Задать значения рынка # {node.name}')
+
             dlg.A = ""
             dlg.B = ""
 
@@ -46,7 +44,6 @@ if __name__ == "__main__":
             main_layout.addLayout(l)
             main_layout.addLayout(buttons_layout)
             dlg.setLayout(main_layout)
-
             leA = QLineEdit()
             leB = QLineEdit()
             leA.setValidator(validator)
@@ -55,6 +52,13 @@ if __name__ == "__main__":
             l.setWidget(0, QFormLayout.FieldRole, leA)
             l.setWidget(1, QFormLayout.LabelRole, QLabel("B="))
             l.setWidget(1, QFormLayout.FieldRole, leB)
+
+            # Загрузка старых цен
+            try:
+                leA.setText(str(node.kwargs['level_price'][0]))
+                leB.setText(str(node.kwargs['level_price'][1]))
+            except:
+                pass
 
             buttOK = QPushButton()
             buttCancel = QPushButton()
@@ -118,6 +122,14 @@ if __name__ == "__main__":
                                          )
                     dlg.close()
 
+            # Загрузка старых данных
+            if node.kwargs['firms']:
+                for i in range(len(node.kwargs['firms'])):
+                    table.setItem(i, 0, QTableWidgetItem(node.kwargs['firms'][i]['name_firm']))
+                    table.cellWidget(i, 1).setText(str(node.kwargs['firms'][i]['cost_firm']))
+                    table._addRow()
+                table._removeRow()
+
             pbOK = QPushButton()
             pbCancel = QPushButton()
             pbAdd = QPushButton()
@@ -178,15 +190,18 @@ if __name__ == "__main__":
     hpanel = QHBoxLayout()
     wi.layout().addLayout(hpanel)
 
+
     # Манипуляция рисунком
     def manipulate():
         qgv.manipulation_mode = QGraphVizManipulationMode.Nodes_Move_Mode
+
 
     # Сохранение данных в json
     def save():
         fname = QFileDialog.getSaveFileName(qgv, "Save", "", "*.json")
         if fname[0] != "":
             qgv.saveAsJson(fname[0])
+
 
     # получить структуру данных
     def CalculationsOfIndicators():
@@ -247,6 +262,7 @@ if __name__ == "__main__":
         buttons_layout.addWidget(pbExcel)
         dlg.exec_()
 
+
     # Стирание всей цепи
     def new():
         qgv.engine.graph = Graph("MainGraph")
@@ -255,6 +271,7 @@ if __name__ == "__main__":
         qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], level_price=[], fillcolor="grey")
         qgv.build()
         qgv.repaint()
+
 
     # Загрузка данных из json
     def load():
@@ -265,12 +282,14 @@ if __name__ == "__main__":
             global Number_node
             Number_node = len(graph_js['nodes'])
 
+
     # Дописать удаление дочерних узлов и пересчет
     def rem_node():
         qgv.manipulation_mode = QGraphVizManipulationMode.Node_remove_Mode
         for btn in buttons_list:
             btn.setChecked(False)
         btnRemNode.setChecked(True)
+
 
     # Добавление дочернего узла
     def add_node_child():
