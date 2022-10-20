@@ -30,17 +30,14 @@ if __name__ == "__main__":
     # Событие двойного нажатия на вершину
     # ПРОВЕРЯТЬ ДАННЫЕ
     # ПОДГРУЖАТЬ СТАРЫЕ ДАННЫЕ
-    #  измеинть таблицу в разделе цен(сделать валидацию как тут)
+    #  изменить таблицу в разделе цен(сделать валидацию как тут)
     def node_invoked(node):
-        print(f"Двоеное нажатие на вершины {node.name}")
+        global dlg
+        print(f"Двойное нажатие на вершины {node.name}")
+
         # graph_dic = qgv.engine.graph.toDICT()
-        validator = QDoubleValidator(0.99, 99.99, 4)
-
         # validator.setLocale(QtCore.QLocale("en_US"))
-
-        def cancel():
-            dlg.ok = False
-            dlg.close()
+        validator = QDoubleValidator(0.99, 99.99, 4)
 
         if type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) == 3:
             dlg = QDialog()
@@ -70,11 +67,19 @@ if __name__ == "__main__":
             buttOK.setText("&Сохранить")
             buttCancel.setText("&Отменить")
 
-            def ok():
-                dlg.ok = True
-                dlg.A = leA.text()
-                dlg.B = leB.text()
+            def cancel():
+                if dlg.B != '' and dlg.A != '':
+                    dlg.ok = True
+                else:
+                    dlg.ok = False
                 dlg.close()
+
+            def ok():
+                if leA.text() != "" and leB.text() != "":
+                    dlg.ok = True
+                    dlg.A = leA.text()
+                    dlg.B = leB.text()
+                    dlg.close()
 
             buttOK.clicked.connect(ok)
             buttCancel.clicked.connect(cancel)
@@ -85,62 +90,67 @@ if __name__ == "__main__":
             dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
             dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
             dlg.exec_()
-
             if dlg.ok and dlg.A != '' and dlg.B != '':
                 A = float(dlg.A.replace(',', '.'))
                 B = float(dlg.B.replace(',', '.'))
                 node.kwargs['level_price'] = [A, B]
 
-        dlg = QDialog()
-        dlg.ok = False
-        dlg.setWindowTitle(f'Фирмы узла {node.kwargs["label"]}')
-        main_layout = QVBoxLayout()
-        l = QFormLayout()
-        buttons_layout = QHBoxLayout()
+        # print(dlg.ok)
+        if type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) != 3 or dlg.ok:
+            dlg = QDialog()
+            dlg.ok = False
+            dlg.setWindowTitle(f'Фирмы узла {node.kwargs["label"]}')
+            main_layout = QVBoxLayout()
+            l = QFormLayout()
+            buttons_layout = QHBoxLayout()
 
-        table = TableWidget(1, 2, ["Название фирмы", "Издержки за ед.п"])
-        main_layout.addWidget(table)
-        main_layout.addLayout(l)
-        main_layout.addLayout(buttons_layout)
-        dlg.setLayout(main_layout)
-        dlg.resize(900, 900)
+            table = TableWidget(1, 2, ["Название фирмы", "Издержки за ед.п"])
+            main_layout.addWidget(table)
+            main_layout.addLayout(l)
+            main_layout.addLayout(buttons_layout)
+            dlg.setLayout(main_layout)
+            dlg.resize(900, 900)
 
-        firm_list = []
+            firm_list = []
 
-        def ok():
-            dlg.ok = True
-            rowCount = table.rowCount()
-            for i in range(rowCount):
-                # firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
-                firm_list.append({'name_firm': table.item(i, 0).text(),
-                                  'cost_firm': float(table.item(i, 1).text().replace(',', '.'))}
-                                 )
-            dlg.close()
+            def cancel():
+                dlg.ok = False
+                dlg.close()
 
-        pbOK = QPushButton()
-        pbCancel = QPushButton()
-        pbAdd = QPushButton()
-        pbDelete = QPushButton()
-        pbOK.setText("&Сохранить")
-        pbCancel.setText("&Отменить")
-        pbAdd.setText("&Добавить строку")
-        pbDelete.setText("&Удалить строку")
+            def ok():
+                dlg.ok = True
+                rowCount = table.rowCount()
+                for i in range(rowCount):
+                    # firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
+                    firm_list.append({'name_firm': table.item(i, 0).text(),
+                                      'cost_firm': float(table.cellWidget(i, 1).text().replace(',', '.'))}
+                                     )
+                dlg.close()
 
-        pbOK.clicked.connect(ok)
-        pbCancel.clicked.connect(cancel)
-        pbAdd.clicked.connect(table._addRow)
-        pbDelete.clicked.connect(table._removeRow)
-        buttons_layout.addWidget(pbOK)
-        buttons_layout.addWidget(pbCancel)
-        buttons_layout.addWidget(pbAdd)
-        buttons_layout.addWidget(pbDelete)
+            pbOK = QPushButton()
+            pbCancel = QPushButton()
+            pbAdd = QPushButton()
+            pbDelete = QPushButton()
+            pbOK.setText("&Сохранить")
+            pbCancel.setText("&Отменить")
+            pbAdd.setText("&Добавить строку")
+            pbDelete.setText("&Удалить строку")
 
-        dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
-        dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
-        dlg.exec_()
+            pbOK.clicked.connect(ok)
+            pbCancel.clicked.connect(cancel)
+            pbAdd.clicked.connect(table._addRow)
+            pbDelete.clicked.connect(table._removeRow)
+            buttons_layout.addWidget(pbOK)
+            buttons_layout.addWidget(pbCancel)
+            buttons_layout.addWidget(pbAdd)
+            buttons_layout.addWidget(pbDelete)
 
-        if dlg.ok and firm_list:
-            node.kwargs['firms'] = firm_list
+            dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
+            dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
+            dlg.exec_()
+
+            if dlg.ok and firm_list:
+                node.kwargs['firms'] = firm_list
 
 
     def node_removed(node):
@@ -271,7 +281,7 @@ if __name__ == "__main__":
             Number_node = len(graph_js['nodes'])
 
 
-    # Дописать удаление лчоерний улов и пересчет
+    # Дописать удаление дочерних узлов и пересчет
     def rem_node():
         qgv.manipulation_mode = QGraphVizManipulationMode.Node_remove_Mode
         for btn in buttons_list:
@@ -292,20 +302,16 @@ if __name__ == "__main__":
     # Добавить кнопки
     btnNew = QPushButton("Заново")
     btnNew.clicked.connect(new)
-
     btnOpen = QPushButton("Загрузить")
     btnOpen.clicked.connect(load)
-
     btnSave = QPushButton("Сохранить")
     btnSave.clicked.connect(save)
-
     btndddd = QPushButton("Рассчитать")
     btndddd.clicked.connect(CalculationsOfIndicators)
 
     hpanel.addWidget(btnNew)
     hpanel.addWidget(btnOpen)
     hpanel.addWidget(btnSave)
-
     hpanel.addWidget(btndddd)
 
     buttons_list = []
