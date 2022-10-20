@@ -7,7 +7,6 @@ from QGraphViz.DotParser import Graph
 from QGraphViz.Engines import Dot
 from QGraphViz.QGraphViz import QGraphViz, QGraphVizManipulationMode
 from calculations import all_calculation_fun, type_node, daughters_map
-
 from tableWidget import TableWidget
 
 Parent_node = ''
@@ -28,15 +27,10 @@ if __name__ == "__main__":
 
 
     # Событие двойного нажатия на вершину
-    # ПРОВЕРЯТЬ ДАННЫЕ
     # ПОДГРУЖАТЬ СТАРЫЕ ДАННЫЕ
-    #  изменить таблицу в разделе цен(сделать валидацию как тут)
     def node_invoked(node):
         global dlg
         print(f"Двойное нажатие на вершины {node.name}")
-
-        # graph_dic = qgv.engine.graph.toDICT()
-        # validator.setLocale(QtCore.QLocale("en_US"))
         validator = QDoubleValidator(0.99, 99.99, 4)
 
         if type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) == 3:
@@ -95,7 +89,6 @@ if __name__ == "__main__":
                 B = float(dlg.B.replace(',', '.'))
                 node.kwargs['level_price'] = [A, B]
 
-        # print(dlg.ok)
         if type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) != 3 or dlg.ok:
             dlg = QDialog()
             dlg.ok = False
@@ -103,14 +96,12 @@ if __name__ == "__main__":
             main_layout = QVBoxLayout()
             l = QFormLayout()
             buttons_layout = QHBoxLayout()
-
             table = TableWidget(1, 2, ["Название фирмы", "Издержки за ед.п"])
             main_layout.addWidget(table)
             main_layout.addLayout(l)
             main_layout.addLayout(buttons_layout)
             dlg.setLayout(main_layout)
             dlg.resize(900, 900)
-
             firm_list = []
 
             def cancel():
@@ -118,14 +109,14 @@ if __name__ == "__main__":
                 dlg.close()
 
             def ok():
-                dlg.ok = True
-                rowCount = table.rowCount()
-                for i in range(rowCount):
-                    # firm_list.append([table.item(i,0).text(),table.item(i,1).text()])
-                    firm_list.append({'name_firm': table.item(i, 0).text(),
-                                      'cost_firm': float(table.cellWidget(i, 1).text().replace(',', '.'))}
-                                     )
-                dlg.close()
+                if table.isEmptys():
+                    dlg.ok = True
+                    rowCount = table.rowCount()
+                    for i in range(rowCount):
+                        firm_list.append({'name_firm': table.item(i, 0).text(),
+                                          'cost_firm': float(table.cellWidget(i, 1).text().replace(',', '.'))}
+                                         )
+                    dlg.close()
 
             pbOK = QPushButton()
             pbCancel = QPushButton()
@@ -135,7 +126,6 @@ if __name__ == "__main__":
             pbCancel.setText("&Отменить")
             pbAdd.setText("&Добавить строку")
             pbDelete.setText("&Удалить строку")
-
             pbOK.clicked.connect(ok)
             pbCancel.clicked.connect(cancel)
             pbAdd.clicked.connect(table._addRow)
@@ -144,7 +134,6 @@ if __name__ == "__main__":
             buttons_layout.addWidget(pbCancel)
             buttons_layout.addWidget(pbAdd)
             buttons_layout.addWidget(pbDelete)
-
             dlg.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
             dlg.setWindowFlag(QtCore.Qt.WindowCloseButtonHint, False)
             dlg.exec_()
@@ -174,9 +163,6 @@ if __name__ == "__main__":
     qgv.new(Dot(Graph("Main_Graph"), show_subgraphs=ShowSubGraphs, font=QFont("Arial", 12), margins=[20, 20]))
     # Добавляем первый узел
     qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], level_price=[], fillcolor="#b1b0af")
-    # n5 = qgv.addNode(qgv.engine.graph, "Node5", label="N5", shape="polygon", fillcolor="red", color="white")
-    # qgv.addEdge(n2, n4, {"width": 2})
-
     # Постройте граф (механизм компоновки организует расположение узлов и соединений)
     qgv.build()
     # Задание формочки
@@ -192,16 +178,15 @@ if __name__ == "__main__":
     hpanel = QHBoxLayout()
     wi.layout().addLayout(hpanel)
 
-
+    # Манипуляция рисунком
     def manipulate():
         qgv.manipulation_mode = QGraphVizManipulationMode.Nodes_Move_Mode
 
-
+    # Сохранение данных в json
     def save():
         fname = QFileDialog.getSaveFileName(qgv, "Save", "", "*.json")
         if fname[0] != "":
             qgv.saveAsJson(fname[0])
-
 
     # получить структуру данных
     def CalculationsOfIndicators():
@@ -262,7 +247,7 @@ if __name__ == "__main__":
         buttons_layout.addWidget(pbExcel)
         dlg.exec_()
 
-
+    # Стирание всей цепи
     def new():
         qgv.engine.graph = Graph("MainGraph")
         global Number_node
@@ -271,7 +256,7 @@ if __name__ == "__main__":
         qgv.build()
         qgv.repaint()
 
-
+    # Загрузка данных из json
     def load():
         fname = QFileDialog.getOpenFileName(qgv, "Open", "", "*.json")
         if fname[0] != "":
@@ -280,7 +265,6 @@ if __name__ == "__main__":
             global Number_node
             Number_node = len(graph_js['nodes'])
 
-
     # Дописать удаление дочерних узлов и пересчет
     def rem_node():
         qgv.manipulation_mode = QGraphVizManipulationMode.Node_remove_Mode
@@ -288,7 +272,7 @@ if __name__ == "__main__":
             btn.setChecked(False)
         btnRemNode.setChecked(True)
 
-
+    # Добавление дочернего узла
     def add_node_child():
         if Parent_node != '':
             global Number_node

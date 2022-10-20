@@ -25,9 +25,7 @@ def all_calculation_fun(graph):
         v1 = (volume_calculation(cart_nodes, nodes, parent, cart_maps))
         cart_nodes[nodes]['value'] = v1[0].args[0][:-1]
         cart_nodes[nodes]['profit'] = v1[1]
-        # cart_nodes[nodes]['value'] = (volume_calculation(cart_nodes, nodes, parent, cart_maps)).args[0][:-1]
 
-    
     revers_stack = stack[::-1]
     for new_result in revers_stack:
         q = sym.symbols(f"q{new_result}_1:{len(cart_nodes[new_result]['value']) + 1}")
@@ -52,8 +50,8 @@ def all_calculation_fun(graph):
                 for
                 x in cart_nodes[new_result]['profit']]
 
-
     return cart_nodes
+
 
 # Функция расчет цены
 def price_function(nf, name_node, maps):
@@ -116,7 +114,6 @@ def daughters_map(edges):
     for i in edges:
         if i['source'] in maps:
             (maps.get(i['source'])).append(i['dest'])
-            # maps.update( {i['source']:(maps.get(i['source'])).append(i['dest'])})
         else:
             maps.update({i['source']: [i['dest']]})
     return maps
@@ -126,12 +123,6 @@ def daughters_map(edges):
 def node_firm(nodes):
     data = {}
     for i in nodes:
-        # cost.update({i['name']: [c['cost_firm'] for c in i['kwargs']['firms']]})
-        # try:
-        #     p = i['kwargs']['level_price']
-        # except Exception:
-        #     p = []
-
         data.update({i['name']:
             {
                 'cost': [c['cost_firm'] for c in i['kwargs']['firms']],
