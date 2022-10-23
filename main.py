@@ -208,8 +208,8 @@ if __name__ == "__main__":
         graph_dic = qgv.engine.graph.toDICT()
         calculation = all_calculation_fun(graph_dic)
 
-        for key, value in calculation.items():
-            print("{0}: {1}".format(key, value))
+        # for key, value in calculation.items():
+        #     print("{0}: {1}".format(key, value))
         dlg = QDialog()
         dlg.ok = False
         dlg.setWindowTitle(f'Итоговый расчет')

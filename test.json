@@ -1,0 +1,118 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": 1,
+            "kwargs": {
+                "label": "X1.1",
+                "firms": [
+                    {
+                        "name_firm": "21123",
+                        "cost_firm": 1500.0
+                    },
+                    {
+                        "name_firm": "fdsfsdf",
+                        "cost_firm": 1505.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    621.5,
+                    186.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 2,
+            "kwargs": {
+                "label": "X2.1",
+                "firms": [
+                    {
+                        "name_firm": "c211",
+                        "cost_firm": 342.0
+                    },
+                    {
+                        "name_firm": "c212",
+                        "cost_firm": 340.0
+                    },
+                    {
+                        "name_firm": "c213",
+                        "cost_firm": 338.0
+                    },
+                    {
+                        "name_firm": "c214",
+                        "cost_firm": 345.0
+                    }
+                ],
+                "level_price": [
+                    5000.0,
+                    0.25
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    469.75,
+                    332.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 3,
+            "kwargs": {
+                "label": "X3.1",
+                "firms": [
+                    {
+                        "name_firm": "asdas221",
+                        "cost_firm": 120.0
+                    },
+                    {
+                        "name_firm": "a222",
+                        "cost_firm": 122.0
+                    }
+                ],
+                "level_price": [
+                    6000.0,
+                    0.19
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    770.75,
+                    317.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": 1,
+            "dest": 2,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 1,
+            "dest": 3,
+            "kwargs": {
+                "width": 3
+            }
+        }
+    ]
+}

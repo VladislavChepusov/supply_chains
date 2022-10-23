@@ -1,4 +1,5 @@
 import sympy as sym
+import copy
 
 
 # Вернуть ключ по значению
@@ -9,11 +10,113 @@ def get_key(d, value):
                 return k
 
 
+# Должен возвращать граф очищенный от фирм у которых отрицательный обьем
+# (удалить  значение в  firms)
+# Если в firms не осталось значений значит надо удалить вершину и и соеденить ее дочернюю и родительскую.
+def CleaningNegativeVolume(graph, calculation):
+    old_graph = copy.deepcopy(graph)
+    old_calculation = copy.deepcopy(calculation)
+    del_mass_map = []
+    # поиск узлов и фирм с отрицательными обьемами
+    for k in old_calculation:
+        for i in reversed(range(len(old_calculation[k]["value"]))):
+            if old_calculation[k]["value"][i] < 0:
+                del_mass_map.append([k, i])
+    # Удаление из глобального графа информации о фирмах с отрицательным объемом
+    # Сохранение узлов без фирм
+    reconstruction = []
+    for elem in old_graph['nodes']:
+        for x_mark in del_mass_map:
+            if elem["name"] == x_mark[0]:
+                elem["kwargs"]["firms"].pop(x_mark[1])
+        if len(elem["kwargs"]["firms"]) < 1:
+            reconstruction.append(elem["name"])
+
+    # Если будет ошибка то наверное тут
+    reconstruction = list(reversed(reconstruction))
+    # Чтобы не трогать корневую вершины
+    if 1 in reconstruction:
+        reconstruction.remove(1)
+    # Если нужно изенять структура(удалить одну вершины из рассмотерния)
+    if reconstruction:
+        # удаление пустой вершины и соединение с дочерей с родителями
+        # (передача левел парйса родителю)
+        for i in reconstruction:
+            parent = -1
+            child = []
+            for edg in old_graph["edges"]:
+                # Если наша вершина родитель
+                if edg['source'] == i:
+                    child.append(edg['dest'])
+                    old_graph["edges"].remove(edg)
+                elif edg['dest'] == i:
+                    parent = edg['source']
+                    old_graph["edges"].remove(edg)
+            # Выстраивание связи
+            if child:
+                for ch in child:
+                    old_graph["edges"].append({'source': parent, 'dest': ch, 'kwargs': {'width': 3}})
+            # Удаление из основного графа вершины
+            for nj in old_graph["nodes"]:
+                if nj["name"] == i:
+                    old_graph["nodes"].remove(nj)
+
+            # Перенос цены за уровень (?????) кажется это ересь
+            # low_level_node = None
+            # for c in old_graph["nodes"]:
+            #     if c["name"] == i:
+            #         low_level_node = c
+            # for c in old_graph["nodes"]:
+            #     if c["name"] == parent:
+            #         c['kwargs']["level_price"] = low_level_node['kwargs']["level_price"]
+            # hiht_level_node
+            # перенос долга
+            # old_graph["edges"].append({parent:x})
+    return old_graph
+
+
+# Проверка на наличие отрицательных значений объемов
+def isNegative(deci):
+    for node in deci.values():
+        if sum(1 for x in node["value"] if x < 0) > 0:
+            return True
+    return False
+
+
+# Функция вставляющая новые значения в старую структуру (изначальную)
+def OldButGold(old, new):
+    skeleton = copy.deepcopy(old)
+    for zero in skeleton.values():
+        zero["profit"] = [0] * len(zero["value"])
+        zero["value"] = [0] * len(zero["value"])
+    for vice in new:
+        for name in new[vice]["name_firm"]:
+            skeleton_index = skeleton[vice]['name_firm'].index(name)
+            new_index = new[vice]["name_firm"].index(name)
+            skeleton[vice]["profit"][skeleton_index] = new[vice]["profit"][new_index]
+            skeleton[vice]["value"][skeleton_index] = new[vice]["value"][new_index]
+            skeleton[vice]["price"] = new[vice]["price"]
+    return skeleton
+
+
 def all_calculation_fun(graph):
+    decision = CalculationForTheChain(graph)
+    if isNegative(decision):
+        print("отрицательные")
+        pure_graph = CleaningNegativeVolume(graph, decision)
+        new_decision = CalculationForTheChain(pure_graph)
+        result = OldButGold(decision, new_decision)
+        # return decision
+        return result
+    else:
+        print("Нет отрицательные")
+        return decision
+
+
+def CalculationForTheChain(graph):
     cart_maps = daughters_map(graph["edges"])  # Связи
     stack = calculation_queue(cart_maps)  # очередь расчета
     cart_nodes = node_firm(graph["nodes"])  # ТАБЛИЦА ДАННЫЙ
-
     for nodes in stack:
         if nodes != 1:
             parent = get_key(cart_maps, nodes)
@@ -66,13 +169,13 @@ def price_function(nf, name_node, maps):
     return [A, B]
 
 
-# ВОзвращать ли прибыль?
+# Расчет обьемов (и прибыли)
 def volume_calculation(nf, name_node, parent, cart_maps):
     size_ = len(nf[name_node]['cost'])
-    q = sym.symbols(f'q{name_node}_1:{size_ + 1}')  # обьес
+    q = sym.symbols(f'q{name_node}_1:{size_ + 1}')  # обьем
     p = sym.symbols(f'p{parent}')  # цена родителя
     c = nf[name_node]['cost']
-    e = nf[name_node]['price']  # функция цены текущего ущла
+    e = nf[name_node]['price']  # функция цены текущего узла
     switch = {
         1: [q[i] * (e[0] - e[1] * sum(q) - c[i]) for i in range(size_)],  # прибыль корневого уровня
         2: [q[i] * (e[0] - e[1] * sum(q) - p - c[i]) for i in range(size_)],  # прибыль промежуточного уровня
