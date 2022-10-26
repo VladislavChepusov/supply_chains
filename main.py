@@ -46,20 +46,21 @@ if __name__ == "__main__":
             dlg.setLayout(main_layout)
             leA = QLineEdit()
             leB = QLineEdit()
-            leA.setValidator(validator)
-            leB.setValidator(validator)
+
             l.setWidget(0, QFormLayout.LabelRole, QLabel("A="))
             l.setWidget(0, QFormLayout.FieldRole, leA)
             l.setWidget(1, QFormLayout.LabelRole, QLabel("B="))
             l.setWidget(1, QFormLayout.FieldRole, leB)
-
+            # Установить валидатор ток для чисел с плавающей запятой
+            # до 4х символов после запятой
+            leA.setValidator(validator)
+            leB.setValidator(validator)
             # Загрузка старых цен
             try:
-                leA.setText(str(node.kwargs['level_price'][0]))
-                leB.setText(str(node.kwargs['level_price'][1]))
+                leA.setText(str(node.kwargs['level_price'][0]).replace('.', ','))
+                leB.setText(str(node.kwargs['level_price'][1]).replace('.', ','))
             except:
                 pass
-
             buttOK = QPushButton()
             buttCancel = QPushButton()
             buttOK.setText("&Сохранить")
@@ -126,9 +127,12 @@ if __name__ == "__main__":
             if node.kwargs['firms']:
                 for i in range(len(node.kwargs['firms'])):
                     table.setItem(i, 0, QTableWidgetItem(node.kwargs['firms'][i]['name_firm']))
-                    table.cellWidget(i, 1).setText(str(node.kwargs['firms'][i]['cost_firm']))
+                    table.cellWidget(i, 1).setText(str(node.kwargs['firms'][i]['cost_firm']).replace('.', ','))
                     table._addRow()
                 table._removeRow()
+
+
+
 
             pbOK = QPushButton()
             pbCancel = QPushButton()
