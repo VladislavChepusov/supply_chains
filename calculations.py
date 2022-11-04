@@ -9,6 +9,37 @@ def get_key(d, value):
             if j == value:
                 return k
 
+# рынки.(мозги кипят от темперутары я болен)
+def delete_market(mapgs,rec):
+    # reconstruction все отрицательные узлы
+    # mapping = карта связей
+    # parent_t - список родитель терминальных узлов
+    #del_little_graph планируется что это список которые мы удаляем сразу(без склеивания дочерних и родительсикх вершин)
+    mapping = copy.deepcopy(mapgs)
+    parent_t = []
+    del_little_graph = []
+    print(f"reconstruction = {rec}")
+    print(f"mapping ={mapping}")
+    for x1 in rec:
+        if type_node(x1, mapping) == 3:
+            papa = get_key(mapping, x1)
+            mapping[papa].remove(x1)
+            if papa not in parent_t:
+                parent_t.append(papa)
+    print(f"parent = {parent_t}")
+    print(f"mapping = {mapping}")
+    for x2 in mapping:
+        if not mapping[x2]:
+            del_little_graph.append(x2)
+            for num in mapgs[x2]:
+                del_little_graph.append(num)
+            pg = get_key(mapping,x2)
+            mapping[pg].remove(x2)
+
+
+    print(f"del_little_graph ={del_little_graph}")
+    print(f'mapping = {mapping}')
+
 
 # Должен возвращать граф очищенный от фирм у которых отрицательный обьем
 # (удалить  значение в  firms)
@@ -17,7 +48,7 @@ def CleaningNegativeVolume(graph, calculation):
     old_graph = copy.deepcopy(graph)
     old_calculation = copy.deepcopy(calculation)
     del_mass_map = []
-    # поиск узлов и фирм с отрицательными обьемами
+    # поиск узлов и фирм с отрицательными объемами
     for k in old_calculation:
         for i in reversed(range(len(old_calculation[k]["value"]))):
             if old_calculation[k]["value"][i] < 0:
@@ -34,10 +65,23 @@ def CleaningNegativeVolume(graph, calculation):
 
     # Если будет ошибка то наверное тут
     reconstruction = list(reversed(reconstruction))
-    # Чтобы не трогать корневую вершины
+    # Если корневая вершина вся отрицательна (переписать хардкод)
     if 1 in reconstruction:
-        reconstruction.remove(1)
-    # Если нужно изенять структура(удалить одну вершины из рассмотерния)
+        print(old_graph)
+        old_graph = {'name': 'MainGraph',
+                     'graph_type': 0,
+                     'kwargs': {},
+                     'nodes': [{'name': 1, 'kwargs': {'label': 'X1.1', 'firms': [], 'level_price': [], 'fillcolor': 'grey'}}],
+                     'edges': []}
+        return old_graph
+
+    # МДАААААА (тут надо дописать удаление поддерева если терминальные вершину отрицательны
+    old_mapping = daughters_map(old_graph["edges"])
+    delete_market(old_mapping,reconstruction)
+
+
+
+    # Если нужно изменять структура(удалить одну вершины из рассмотрения)
     if reconstruction:
         # удаление пустой вершины и соединение с дочерей с родителями
         # (передача левел парйса родителю)
@@ -61,17 +105,6 @@ def CleaningNegativeVolume(graph, calculation):
                 if nj["name"] == i:
                     old_graph["nodes"].remove(nj)
 
-            # Перенос цены за уровень (?????) кажется это ересь
-            # low_level_node = None
-            # for c in old_graph["nodes"]:
-            #     if c["name"] == i:
-            #         low_level_node = c
-            # for c in old_graph["nodes"]:
-            #     if c["name"] == parent:
-            #         c['kwargs']["level_price"] = low_level_node['kwargs']["level_price"]
-            # hiht_level_node
-            # перенос долга
-            # old_graph["edges"].append({parent:x})
     return old_graph
 
 
@@ -101,15 +134,18 @@ def OldButGold(old, new):
 
 def all_calculation_fun(graph):
     decision = CalculationForTheChain(graph)
+    #return decision
     if isNegative(decision):
-        print("отрицательные")
+        #print("отрицательные")
+        #print(f"1) = {graph}")
         pure_graph = CleaningNegativeVolume(graph, decision)
+        #print(f"2) = {pure_graph}")
         new_decision = CalculationForTheChain(pure_graph)
         result = OldButGold(decision, new_decision)
         # return decision
         return result
     else:
-        print("Нет отрицательные")
+        print("неотрицательные")
         return decision
 
 

@@ -1,0 +1,215 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": 1,
+            "kwargs": {
+                "label": "X1.1",
+                "firms": [
+                    {
+                        "name_firm": "X111",
+                        "cost_firm": 1500.0
+                    },
+                    {
+                        "name_firm": "X112",
+                        "cost_firm": 1505.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    725.5,
+                    112.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 2,
+            "kwargs": {
+                "label": "X2.1",
+                "firms": [
+                    {
+                        "name_firm": "X211",
+                        "cost_firm": 700.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    561.75,
+                    265.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 3,
+            "kwargs": {
+                "label": "X3.1",
+                "firms": [
+                    {
+                        "name_firm": "X311",
+                        "cost_firm": 720.0
+                    },
+                    {
+                        "name_firm": "X312",
+                        "cost_firm": 710.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    892.75,
+                    267.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 4,
+            "kwargs": {
+                "label": "X4.2",
+                "firms": [
+                    {
+                        "name_firm": "X421",
+                        "cost_firm": 342.0
+                    },
+                    {
+                        "name_firm": "X422",
+                        "cost_firm": 340.0
+                    },
+                    {
+                        "name_firm": "X423",
+                        "cost_firm": 338.0
+                    },
+                    {
+                        "name_firm": "X424",
+                        "cost_firm": 345.0
+                    }
+                ],
+                "level_price": [
+                    5000.0,
+                    0.25
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    467.75,
+                    400.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 5,
+            "kwargs": {
+                "label": "X5.2",
+                "firms": [
+                    {
+                        "name_firm": "X521",
+                        "cost_firm": 3700.0
+                    },
+                    {
+                        "name_firm": "X522",
+                        "cost_firm": 3802.0
+                    }
+                ],
+                "level_price": [
+                    6000.0,
+                    0.09
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    677.75,
+                    403.5
+                ],
+                "size": [
+                    60,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 6,
+            "kwargs": {
+                "label": "X6.3",
+                "firms": [
+                    {
+                        "name_firm": "X631",
+                        "cost_firm": 200.0
+                    }
+                ],
+                "level_price": [
+                    5500.0,
+                    0.15
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    957.75,
+                    410.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": 1,
+            "dest": 2,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 1,
+            "dest": 3,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 2,
+            "dest": 4,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 2,
+            "dest": 5,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 3,
+            "dest": 6,
+            "kwargs": {
+                "width": 3
+            }
+        }
+    ]
+}
