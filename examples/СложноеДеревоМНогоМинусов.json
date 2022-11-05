@@ -1,0 +1,370 @@
+{
+    "name": "Main_Graph",
+    "graph_type": 0,
+    "kwargs": {},
+    "nodes": [
+        {
+            "name": 1,
+            "kwargs": {
+                "label": "X1.1",
+                "firms": [
+                    {
+                        "name_firm": "\u044b\u0430\u0432\u043f\u0432\u0430\u043f\u0432\u0430\u043f\u0432\u0430\u043f",
+                        "cost_firm": 1000.0
+                    },
+                    {
+                        "name_firm": "\u0444\u0446\u0432\u0444\u044b\u0432\u0444",
+                        "cost_firm": 9000.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    724.5,
+                    111.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 2,
+            "kwargs": {
+                "label": "X2.1",
+                "firms": [
+                    {
+                        "name_firm": "\u043f\u0441\u0438\u043c\u0440\u043c\u043f",
+                        "cost_firm": 200.0
+                    },
+                    {
+                        "name_firm": "414\u0430\u043f\u0440\u043f",
+                        "cost_firm": 150.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    378.75,
+                    284.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 3,
+            "kwargs": {
+                "label": "X3.1",
+                "firms": [
+                    {
+                        "name_firm": "4\u0430\u043f\u0440\u0430\u043f\u0440\u0430\u043f\u0440\u0430",
+                        "cost_firm": 1500.0
+                    }
+                ],
+                "level_price": [
+                    9000.0,
+                    0.07
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    731.75,
+                    277.5
+                ],
+                "size": [
+                    57,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 4,
+            "kwargs": {
+                "label": "X4.1",
+                "firms": [
+                    {
+                        "name_firm": "\u044b\u0432\u0430\u044b\u0432\u0430",
+                        "cost_firm": 64000.0
+                    },
+                    {
+                        "name_firm": "\u044b\u0432\u0430\u044b\u0432\u0430",
+                        "cost_firm": 6400.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    1094.75,
+                    240.5
+                ],
+                "size": [
+                    57,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 5,
+            "kwargs": {
+                "label": "X5.2",
+                "firms": [
+                    {
+                        "name_firm": "\u0430\u043f\u0440\u0430\u043f\u0440\u0430\u043f\u0440",
+                        "cost_firm": 1500.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    206.75,
+                    407.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 6,
+            "kwargs": {
+                "label": "X6.2",
+                "firms": [
+                    {
+                        "name_firm": "\u043f\u043d\u043e\u043f\u0440",
+                        "cost_firm": 110.0
+                    },
+                    {
+                        "name_firm": "\u043f\u0440\u043e\u043f\u043e\u043f",
+                        "cost_firm": 110.0
+                    }
+                ],
+                "level_price": [],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    491.75,
+                    426.5
+                ],
+                "size": [
+                    60,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 7,
+            "kwargs": {
+                "label": "X7.4",
+                "firms": [
+                    {
+                        "name_firm": "\u0441\u043c\u0438\u0441\u0432\u0441\u043f\u0430",
+                        "cost_firm": 4000.0
+                    }
+                ],
+                "level_price": [
+                    5000.0,
+                    0.2
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    1065.75,
+                    394.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 8,
+            "kwargs": {
+                "label": "X8.4",
+                "firms": [
+                    {
+                        "name_firm": "12\u044b\u0432\u0430\u044b\u0432\u0430",
+                        "cost_firm": 5555.0
+                    }
+                ],
+                "level_price": [
+                    5000.0,
+                    0.2
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    1277.75,
+                    383.5
+                ],
+                "size": [
+                    60,
+                    43
+                ]
+            }
+        },
+        {
+            "name": 9,
+            "kwargs": {
+                "label": "X9.5",
+                "firms": [
+                    {
+                        "name_firm": "\u043f",
+                        "cost_firm": 7000.0
+                    },
+                    {
+                        "name_firm": "\u043f",
+                        "cost_firm": 7000.0
+                    }
+                ],
+                "level_price": [
+                    6000.0,
+                    0.14
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    143.75,
+                    550.5
+                ],
+                "size": [
+                    60,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 10,
+            "kwargs": {
+                "label": "X10.5",
+                "firms": [
+                    {
+                        "name_firm": "\u043f\u0440\u043e\u043f",
+                        "cost_firm": 7000.0
+                    }
+                ],
+                "level_price": [
+                    7000.0,
+                    0.7
+                ],
+                "fillcolor": "#b1b0af",
+                "pos": [
+                    276.5,
+                    550.5
+                ],
+                "size": [
+                    71,
+                    43
+                ],
+                "width": 1
+            }
+        },
+        {
+            "name": 11,
+            "kwargs": {
+                "label": "X11.6",
+                "firms": [
+                    {
+                        "name_firm": "\u0440\u0438\u043e\u043e\u0438",
+                        "cost_firm": 120.0
+                    }
+                ],
+                "level_price": [
+                    8000.0,
+                    0.09
+                ],
+                "fillcolor": "#b1b0af",
+                "width": 1,
+                "pos": [
+                    521.75,
+                    539.5
+                ],
+                "size": [
+                    70,
+                    43
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": 1,
+            "dest": 2,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 1,
+            "dest": 3,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 1,
+            "dest": 4,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 2,
+            "dest": 5,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 2,
+            "dest": 6,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 4,
+            "dest": 7,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 4,
+            "dest": 8,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 5,
+            "dest": 9,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 5,
+            "dest": 10,
+            "kwargs": {
+                "width": 3
+            }
+        },
+        {
+            "source": 6,
+            "dest": 11,
+            "kwargs": {
+                "width": 3
+            }
+        }
+    ]
+}

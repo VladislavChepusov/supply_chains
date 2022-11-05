@@ -9,41 +9,38 @@ def get_key(d, value):
             if j == value:
                 return k
 
-# рынки.(мозги кипят от темперутары я болен)
-def delete_market(mapgs,rec):
-    # reconstruction все отрицательные узлы
-    # mapping = карта связей
-    # parent_t - список родитель терминальных узлов
-    #del_little_graph планируется что это список которые мы удаляем сразу(без склеивания дочерних и родительсикх вершин)
+
+# Возвращает список ячеек которые можно удалить тк их терминальные вершины банкроты
+def delete_market(mapgs, rec):
     mapping = copy.deepcopy(mapgs)
-    parent_t = []
     del_little_graph = []
-    print(f"reconstruction = {rec}")
-    print(f"mapping ={mapping}")
     for x1 in rec:
         if type_node(x1, mapping) == 3:
             papa = get_key(mapping, x1)
             mapping[papa].remove(x1)
-            if papa not in parent_t:
-                parent_t.append(papa)
-    print(f"parent = {parent_t}")
-    print(f"mapping = {mapping}")
-    for x2 in mapping:
-        if not mapping[x2]:
-            del_little_graph.append(x2)
-            for num in mapgs[x2]:
-                del_little_graph.append(num)
-            pg = get_key(mapping,x2)
-            mapping[pg].remove(x2)
+    Next = True
+    while Next:
+        for x2 in mapping:
+            if not mapping[x2]:
+                del_little_graph.append(x2)
+                for num in mapgs[x2]:
+                    del_little_graph.append(num)
+                mapping.pop(x2)
+                papa = get_key(mapping, x2)
+                mapping[papa].remove(x2)
+                break
+        for x2 in mapping:
+            if not mapping[x2]:
+                Next = True
+                break
+            else:
+                Next = False
+    return del_little_graph
 
 
-    print(f"del_little_graph ={del_little_graph}")
-    print(f'mapping = {mapping}')
-
-
-# Должен возвращать граф очищенный от фирм у которых отрицательный обьем
-# (удалить  значение в  firms)
-# Если в firms не осталось значений значит надо удалить вершину и и соеденить ее дочернюю и родительскую.
+# Должен возвращать граф очищенный от фирм у которых отрицательный объем
+# Если корневая вершина отрицательна то ввся цепь нулевая
+# если терминальная вершина отрицательна то его родительский граф банкрот
 def CleaningNegativeVolume(graph, calculation):
     old_graph = copy.deepcopy(graph)
     old_calculation = copy.deepcopy(calculation)
@@ -63,28 +60,34 @@ def CleaningNegativeVolume(graph, calculation):
         if len(elem["kwargs"]["firms"]) < 1:
             reconstruction.append(elem["name"])
 
-    # Если будет ошибка то наверное тут
+    # Если будет ошибка то наверное тут. Манипуляция именно с узлами ниже
     reconstruction = list(reversed(reconstruction))
     # Если корневая вершина вся отрицательна (переписать хардкод)
     if 1 in reconstruction:
-        print(old_graph)
         old_graph = {'name': 'MainGraph',
                      'graph_type': 0,
                      'kwargs': {},
-                     'nodes': [{'name': 1, 'kwargs': {'label': 'X1.1', 'firms': [], 'level_price': [], 'fillcolor': 'grey'}}],
+                     'nodes': [
+                         {'name': 1, 'kwargs': {'label': 'X1.1', 'firms': [], 'level_price': [], 'fillcolor': 'grey'}}],
                      'edges': []}
         return old_graph
 
-    # МДАААААА (тут надо дописать удаление поддерева если терминальные вершину отрицательны
+    # Если рынки банкроты, то поддерево выходящее на эти рынки тоже удаляется
     old_mapping = daughters_map(old_graph["edges"])
-    delete_market(old_mapping,reconstruction)
+    d = delete_market(old_mapping, reconstruction)
+    for x4 in d:
+        # Удаление связей
+        for edg1 in old_graph["edges"]:
+            if edg1['source'] == x4 or edg1['dest'] == x4:
+                old_graph["edges"].remove(edg1)
+        for nj1 in old_graph["nodes"]:
+            if nj1["name"] == x4:
+                old_graph["nodes"].remove(nj1)
 
-
-
+    reconstruction = [x for x in reconstruction if x not in d]
     # Если нужно изменять структура(удалить одну вершины из рассмотрения)
     if reconstruction:
         # удаление пустой вершины и соединение с дочерей с родителями
-        # (передача левел парйса родителю)
         for i in reconstruction:
             parent = -1
             child = []
@@ -134,18 +137,13 @@ def OldButGold(old, new):
 
 def all_calculation_fun(graph):
     decision = CalculationForTheChain(graph)
-    #return decision
+    # return decision
     if isNegative(decision):
-        #print("отрицательные")
-        #print(f"1) = {graph}")
         pure_graph = CleaningNegativeVolume(graph, decision)
-        #print(f"2) = {pure_graph}")
         new_decision = CalculationForTheChain(pure_graph)
         result = OldButGold(decision, new_decision)
-        # return decision
         return result
     else:
-        print("неотрицательные")
         return decision
 
 
