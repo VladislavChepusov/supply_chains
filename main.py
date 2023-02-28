@@ -24,13 +24,11 @@ if __name__ == "__main__":
             global Parent_node
             Parent_node = node
 
-
     # Событие двойного нажатия на вершину
     def node_invoked(node):
         global dlg
         print(f"Двойное нажатие на вершины {node.name}")
         validator = QDoubleValidator(0.99, 99.99, 4)
-
         if type_node(node.name, daughters_map(qgv.engine.graph.toDICT()["edges"])) == 3:
             dlg = QDialog()
             dlg.ok = False
@@ -53,7 +51,7 @@ if __name__ == "__main__":
             l.setWidget(1, QFormLayout.LabelRole, QLabel("B="))
             l.setWidget(1, QFormLayout.FieldRole, leB)
             # Установить валидатор ток для чисел с плавающей запятой
-            # до 4х символов после запятой
+            # до 4-х символов после запятой
             leA.setValidator(validator)
             leB.setValidator(validator)
             # Загрузка старых цен
@@ -155,9 +153,8 @@ if __name__ == "__main__":
             if dlg.ok and firm_list:
                 node.kwargs['firms'] = firm_list
 
-
+    # Удаление вершин от листьев к родителям (снизу вверх)
     def node_removed(node):
-        #qgv.build()
         map_ = daughters_map(qgv.engine.graph.toDICT()["edges"])
         if node.name in map_:  # node in dict
             list_ = deletionList(map_, node.name, [])
@@ -165,8 +162,7 @@ if __name__ == "__main__":
                 qgv.removeNode(qgv.engine.graph.findNode(_))
                 qgv.build()
 
-
-    # Удаление верщин от листьев к родителям (снизу вверх)
+    # Список последовательного удаления
     def deletionList(dict_, parent_name, list_=None):
         if list_ is None:
             list_ = []
@@ -212,7 +208,6 @@ if __name__ == "__main__":
     hpanel = QHBoxLayout()
     wi.layout().addLayout(hpanel)
 
-
     # Манипуляция рисунком
     def manipulate():
         off_button()
@@ -220,13 +215,11 @@ if __name__ == "__main__":
         btnManip.setChecked(True)
         qgv.manipulation_mode = QGraphVizManipulationMode.Nodes_Move_Mode
 
-
     # Сохранение данных в json
     def save():
         fname = QFileDialog.getSaveFileName(qgv, "Save", "", "*.json")
         if fname[0] != "":
             qgv.saveAsJson(fname[0])
-
 
     # получить структуру данных
     def CalculationsOfIndicators():
@@ -287,7 +280,6 @@ if __name__ == "__main__":
         buttons_layout.addWidget(pbExcel)
         dlg.exec_()
 
-
     # Стирание всей цепи
     def new():
         off_button()
@@ -299,7 +291,6 @@ if __name__ == "__main__":
         qgv.addNode(qgv.engine.graph, 1, label=f"X1.1", firms=[], level_price=[], fillcolor="grey")
         qgv.build()
         qgv.repaint()
-
 
     # Загрузка данных из json
     def load():
@@ -313,14 +304,12 @@ if __name__ == "__main__":
             global Number_node
             Number_node = len(graph_js['nodes'])
 
-
-    # Дописать удаление дочерних узлов и пересчет
+    # Удаление вершины(включить режим)
     def rem_node():
         off_button()
         qgv.manipulation_mode = QGraphVizManipulationMode.Node_remove_Mode
         btnRemNode.setCheckable(True)
         btnRemNode.setChecked(True)
-
 
     # Добавление дочернего узла
     def add_node_child():
@@ -372,7 +361,7 @@ if __name__ == "__main__":
     hpanel.addWidget(btnAddChild)
     # buttons_list.append(btnAddChild)
 
-    btnRemNode = QPushButton("Удалить узел(пока работает неверно)")
+    btnRemNode = QPushButton("Удалить узел")
     btnRemNode.setCheckable(True)
     btnRemNode.clicked.connect(rem_node)
     hpanel.addWidget(btnRemNode)

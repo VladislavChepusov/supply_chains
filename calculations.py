@@ -27,7 +27,11 @@ def delete_market(mapgs, rec):
                     del_little_graph.append(num)
                 mapping.pop(x2)
                 papa = get_key(mapping, x2)
-                mapping[papa].remove(x2)
+                if papa is not None:
+                    mapping[papa].remove(x2)
+                else:
+                    Next = False
+                    break
                 break
         for x2 in mapping:
             if not mapping[x2]:
@@ -60,7 +64,7 @@ def CleaningNegativeVolume(graph, calculation):
         if len(elem["kwargs"]["firms"]) < 1:
             reconstruction.append(elem["name"])
 
-    # Если будет ошибка то наверное тут. Манипуляция именно с узлами ниже
+    # Если будет ошибка, то наверное тут. Манипуляция именно с узлами ниже
     reconstruction = list(reversed(reconstruction))
     # Если корневая вершина вся отрицательна (переписать хардкод)
     if 1 in reconstruction:
@@ -138,7 +142,6 @@ def OldButGold(old, new):
 # Корневая функция
 def all_calculation_fun(graph):
     decision = CalculationForTheChain(graph)
-    #return decision
     if isNegative(decision):
         pure_graph = CleaningNegativeVolume(graph, decision)
         new_decision = CalculationForTheChain(pure_graph)
@@ -207,7 +210,7 @@ def price_function(nf, name_node, maps):
 # Расчет объемов (и прибыли)
 def volume_calculation(nf, name_node, parent, cart_maps):
     size_ = len(nf[name_node]['cost'])
-    q = sym.symbols(f'q{name_node}_1:{size_ + 1}')  # обьем
+    q = sym.symbols(f'q{name_node}_1:{size_ + 1}')  # объем
     p = sym.symbols(f'p{parent}')  # цена родителя
     c = nf[name_node]['cost']
     e = nf[name_node]['price']  # функция цены текущего узла
@@ -261,10 +264,9 @@ def daughters_map(edges):
 def node_firm(nodes):
     data = {}
     for i in nodes:
-        data.update({i['name']:
-            {
+        data.update({i['name']: {
                 'cost': [c['cost_firm'] for c in i['kwargs']['firms']],
-                'price': i['kwargs']['level_price'],  # пускай будет массив из 2х значений А и Б тк p = a - b*SUM(value)
+                'price': i['kwargs']['level_price'],  # Массив из 2-х значений А и Б тк p = a - b*SUM(value)
                 'profit': [],
                 'value': [],
                 'name_firm': [c['name_firm'] for c in i['kwargs']['firms']],

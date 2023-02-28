@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QHeaderView, QTableWidget, \
-    QTableWidgetItem, QFileDialog, QMessageBox, QLineEdit, QComboBox
+    QTableWidgetItem, QFileDialog, QMessageBox, QLineEdit
 from xlsxwriter import Workbook
 
 
@@ -49,7 +49,7 @@ class TableWidget(QTableWidget):
                 return False
         return True
 
-    # Сохранение таблицы в ексель
+    # Сохранение таблицы в Excel
     def tableSave(self):
         fileName, ok = QFileDialog.getSaveFileName(
             self,
