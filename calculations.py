@@ -39,7 +39,7 @@ def delete_market(mapgs, rec):
 
 
 # Должен возвращать граф очищенный от фирм у которых отрицательный объем
-# Если корневая вершина отрицательна то ввся цепь нулевая
+# Если корневая вершина отрицательна то вся цепь нулевая
 # если терминальная вершина отрицательна то его родительский граф банкрот
 def CleaningNegativeVolume(graph, calculation):
     old_graph = copy.deepcopy(graph)
@@ -135,9 +135,10 @@ def OldButGold(old, new):
     return skeleton
 
 
+# Корневая функция
 def all_calculation_fun(graph):
     decision = CalculationForTheChain(graph)
-    # return decision
+    #return decision
     if isNegative(decision):
         pure_graph = CleaningNegativeVolume(graph, decision)
         new_decision = CalculationForTheChain(pure_graph)
@@ -190,7 +191,7 @@ def CalculationForTheChain(graph):
     return cart_nodes
 
 
-# Функция расчет цены
+# Функция расчета цены
 def price_function(nf, name_node, maps):
     size_ = len(nf[name_node]['cost'])
     child_node = maps[name_node]
@@ -203,7 +204,7 @@ def price_function(nf, name_node, maps):
     return [A, B]
 
 
-# Расчет обьемов (и прибыли)
+# Расчет объемов (и прибыли)
 def volume_calculation(nf, name_node, parent, cart_maps):
     size_ = len(nf[name_node]['cost'])
     q = sym.symbols(f'q{name_node}_1:{size_ + 1}')  # обьем

@@ -19,10 +19,11 @@ if __name__ == "__main__":
     # Выделение узла
     def node_selected(node):
         if qgv.manipulation_mode == QGraphVizManipulationMode.Node_remove_Mode:
-            print(f"Узел {node.name} был удален")
+            print(f"Удалили  {node.name}")
         else:
             global Parent_node
             Parent_node = node
+
 
     # Событие двойного нажатия на вершину
     def node_invoked(node):
@@ -131,9 +132,6 @@ if __name__ == "__main__":
                     table._addRow()
                 table._removeRow()
 
-
-
-
             pbOK = QPushButton()
             pbCancel = QPushButton()
             pbAdd = QPushButton()
@@ -159,7 +157,27 @@ if __name__ == "__main__":
 
 
     def node_removed(node):
-        print("Вершина удалена")
+        #qgv.build()
+        map_ = daughters_map(qgv.engine.graph.toDICT()["edges"])
+        if node.name in map_:  # node in dict
+            list_ = deletionList(map_, node.name, [])
+            for _ in reversed(list_):
+                qgv.removeNode(qgv.engine.graph.findNode(_))
+                qgv.build()
+
+
+    # Удаление верщин от листьев к родителям (снизу вверх)
+    def deletionList(dict_, parent_name, list_=None):
+        if list_ is None:
+            list_ = []
+        if parent_name in dict_:
+            for node in dict_[parent_name]:
+                list_.append(node)
+                if node in dict_:
+                    deletionList(dict_, node, list_)
+                else:
+                    continue
+        return list_
 
 
     # QGraphViz виджет
@@ -183,7 +201,7 @@ if __name__ == "__main__":
     qgv.build()
     # Задание формочки
     w = QMainWindow()
-    w.setWindowTitle('SCM v1.0')
+    w.setWindowTitle('SCM v1.1')
     # Create a central widget to handle the QGraphViz object
     wi = QWidget()
     wi.setLayout(QVBoxLayout())
@@ -197,6 +215,9 @@ if __name__ == "__main__":
 
     # Манипуляция рисунком
     def manipulate():
+        off_button()
+        btnManip.setCheckable(True)
+        btnManip.setChecked(True)
         qgv.manipulation_mode = QGraphVizManipulationMode.Nodes_Move_Mode
 
 
@@ -269,6 +290,9 @@ if __name__ == "__main__":
 
     # Стирание всей цепи
     def new():
+        off_button()
+        btnManip.setCheckable(True)
+        btnManip.setChecked(True)
         qgv.engine.graph = Graph("MainGraph")
         global Number_node
         Number_node = 1
@@ -279,6 +303,9 @@ if __name__ == "__main__":
 
     # Загрузка данных из json
     def load():
+        off_button()
+        btnManip.setCheckable(True)
+        btnManip.setChecked(True)
         fname = QFileDialog.getOpenFileName(qgv, "Open", "", "*.json")
         if fname[0] != "":
             qgv.loadAJson(fname[0])
@@ -289,14 +316,16 @@ if __name__ == "__main__":
 
     # Дописать удаление дочерних узлов и пересчет
     def rem_node():
+        off_button()
         qgv.manipulation_mode = QGraphVizManipulationMode.Node_remove_Mode
-        for btn in buttons_list:
-            btn.setChecked(False)
+        btnRemNode.setCheckable(True)
         btnRemNode.setChecked(True)
 
 
     # Добавление дочернего узла
     def add_node_child():
+        off_button()
+        btnAddChild.setCheckable(False)
         if Parent_node != '':
             global Number_node
             Number_node += 1
@@ -304,6 +333,13 @@ if __name__ == "__main__":
                                    firms=[], level_price=[], fillcolor="#b1b0af")
             qgv.addEdge(Parent_node, new_node, {"width": 3})
             qgv.build()
+
+
+    def off_button():
+        qgv.manipulation_mode = QGraphVizManipulationMode.Nodes_Move_Mode
+        for btn in buttons_list:
+            btn.setChecked(False)
+            btn.setCheckable(False)
 
 
     # Добавить кнопки
@@ -334,7 +370,7 @@ if __name__ == "__main__":
     btnAddChild.setCheckable(True)
     btnAddChild.clicked.connect(add_node_child)
     hpanel.addWidget(btnAddChild)
-    buttons_list.append(btnAddChild)
+    # buttons_list.append(btnAddChild)
 
     btnRemNode = QPushButton("Удалить узел(пока работает неверно)")
     btnRemNode.setCheckable(True)
