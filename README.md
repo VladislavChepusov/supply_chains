@@ -24,3 +24,8 @@ pip install xlsxwriter
 ```bash
 pip install IPython
 ```
+
+
+# Теоретическая база 
+
+[Посмотреть HTML-страницу](./theory/Выдержка.html "Описание")
